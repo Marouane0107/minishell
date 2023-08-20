@@ -10,14 +10,17 @@
 
 typedef struct s_env
 {
-    char *value;
-    char *name;
-    struct s_env *next;
-}        t_env;
+	char *value;
+	char *name;
+	struct s_env *next;
+}       t_env;
 
 t_env	*get_environ(t_env *envi);
-void    env(t_env *env);
-void    pwd(void);
-
+void	remove_node(t_env **env, char *name);
+void	unset(char *argv[], t_env **env);
+void	ft_env(t_env *env);
+void	pwd(void);
+void	cd(char *path);
+void	echo(int argc, char *argv[]);
 
 # endif
