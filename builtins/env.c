@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 09:53:38 by maouzal           #+#    #+#             */
-/*   Updated: 2023/08/20 17:27:14 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/21 15:46:53 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 void    ft_env(t_env *env)
 {
-    // env = get_environ(env);
     while(env)
     {
-        printf("%s", env->name);
-        printf("=");
-        printf("%s", env->value);
-        printf("\n");
+        ft_putstr_fd(env->name, 1);
+        ft_putstr_fd("=", 1);
+        ft_putstr_fd(env->value, 1);
+        ft_putstr_fd("\n", 1);
         env = env->next;
     }
 }

@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:09 by maouzal           #+#    #+#             */
-/*   Updated: 2023/08/20 10:07:56 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/21 10:47:34 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,11 @@ void    echo(int argc, char *argv[])
     int i;
 
     i = 0;
-    if (argc > 1)
+    while (argv[i])
     {
-        while (argv[i])
-        {
-            printf("%s",argv[i]);
-            i++;
-            if (!argv[i + 1])
-                printf(" ");
-        }
+        printf("%s",argv[i]);
+        i++;
+        if (!argv[i + 1])
+            printf(" ");
     }
 }
