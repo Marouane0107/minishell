@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/21 20:10:30 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/22 12:43:48 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,8 @@ char	*stock(char *av, t_list *lst)
 	{
     	if (ft_strcmp(line, av) == 0)
 			break ;
-        printf("%d\n", get_exp(av, 0, "", lst));
-        if(!get_exp(av, 0, "", lst))
+        if(!ft_strchr(line, '\'') && !ft_strchr(line, '\"'))
             line = check_expend(line, &lst ,0);
-        printf("[%s]\n", line);
 		tmp = ft_strjoin(line, "\n");
         all = ft_strjoin(all, tmp);
 		line = readline("here_doc: ");
@@ -219,28 +217,31 @@ void  fill(t_data **data, t_list *lst, char **s)
         lst = lst->next;
     }
 }
-int    convert_lst(t_list *lst)
+t_data    *convert_lst(t_list *lst)
 {
     char **s;
     t_data *data;
+    t_data *tmp;
     data = malloc(sizeof(t_data));
     if(!data)
         return (0);
-    allocate(&data, count_x(lst, 1) + 1);
+    tmp = data;
+    allocate(&tmp, count_x(lst, 1) + 1);
     s = open_here(lst);
-    fill(&data, lst, s);
-    int i = 0;
-    while(data)
-    {
-         i = 0;
-        printf("in = %d\n", data->in);
-        printf("out = %d\n", data->out);
-        while(data->cmd && data->cmd[i])
-        {
-            printf("cmd = [%s]\n", data->cmd[i]);
-            i++;
-        }
-        data = data->next;
-    }
-        return(1);
+    fill(&tmp, lst, s);
+    // int i = 0;
+    // while(tmp)
+    // {
+    //      i = 0;
+    //     printf("in = %d\n", tmp->in);
+    //     printf("out = %d\n", tmp->out);
+    //     while(tmp->cmd && tmp->cmd[i])
+    //     {
+    //         printf("cmd = [%s]\n", tmp->cmd[i]);
+    //         i++;
+    //     }
+    //     tmp = tmp->next;
+    // }
+    data->env = lst->envi;
+    return (data);
 }

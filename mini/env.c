@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/21 16:44:00 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/22 11:30:54 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char *get_value(char *str)
     return (value);
 }
 
-t_list *get_environ(t_list **lst)
+t_env *get_environ(t_list **lst)
 {
     extern char	**environ;
     int i;
@@ -106,6 +106,6 @@ t_list *get_environ(t_list **lst)
         ft_lstdadd_back1(&(*lst)->envi, ft_lstnew1(name, value));
         i++;
     }
-    return (*lst);
+    return ((*lst)->envi);
 }
 //shlvl=1

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parss.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/21 18:20:47 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/22 12:08:06 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_list	*treatin(char *s)
 	lst = malloc(sizeof(t_list));
 		if(!lst)
 			return (0);
-	lst = get_environ(&lst);
+	lst->envi = get_environ(&lst);
 	p = ft_split(s, ' ');
 	// j = 0;
 	while (p[i])
@@ -91,9 +91,10 @@ int	fil_env(t_list **lst)
 	(*lst)->next = NULL;
 	return (1);
 }
-int	pparss(char *input)
+t_data	*pparss(char *input)
 {
 	t_list	*lst;
+	t_data *data;
 	// int	i;
 	
 	// i = 0;
@@ -104,27 +105,14 @@ int	pparss(char *input)
 	lst = treatin(input);
 	if (!lst)
 		return (0);
-	convert_lst(lst);
+	data = convert_lst(lst);
 	// while (lst)
 	// {
 	// 	printf("%s\n", (lst)->content);
 	// 	printf("%d\n", (lst)->token);
 	// 	lst = (lst)->next;
 	// }
-	return (1);
-}
-void	parss(void)
-{
-	char	*input;
-
-	input = NULL;
-	while (1)
-	{
-		input = readline("minishell$ ");
-		add_history(input);
-		if (!pparss(input))
-			continue ;
-	}
+	return(data);
 }
 // syntax error $cs'\'
 // syntax error $cs'!'

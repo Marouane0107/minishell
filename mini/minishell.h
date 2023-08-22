@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/21 19:54:06 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/22 13:50:24 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,24 +35,26 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+#define BUFFER_SIZE 192400
+
 char				*quote(char *in);
-int					pparss(char *input);
-void				parss(void);
 int					ft_strchrr(char *s, char c);
-typedef struct s_data
-{
-	char **cmd;
-	int in;
-	int out;
-	struct s_data	*next;
-	
-}	t_data;
 typedef struct s_env
 {
 	char *value;
 	char *name;
 	struct s_env *next;
 }		t_env;
+typedef struct s_data
+{
+	t_env *env;
+	char **cmd;
+	int in;
+	int out;
+	struct s_data	*next;
+	
+}	t_data;
 
 typedef struct s_list
 {
@@ -65,9 +67,21 @@ typedef struct s_list
 	t_env 			*envi;
 	struct s_list	*next;
 }					t_list;
-int    convert_lst(t_list *lst);
+
+
+void	remove_node(t_data *data, char *name);
+void	ft_unset(t_data *cmd);
+void	ft_env(t_data *data);
+void	ft_pwd(void);
+void	ft_cd(t_data *data);
+void    ft_exit(int status);
+void	ft_echo(t_data *data);
+
+t_data	*pparss(char *input);
+t_data    *convert_lst(t_list *lst);
+t_env *get_environ(t_list **lst);
 int	get_exp(char *s, int j, char *q, t_list *lst);
-t_list *get_environ(t_list **lst);
+t_data	*parss(void);
 char	*check_expend(char *s, t_list **lst, int j);
 int	ft_lstsize(t_data *lst);
 t_data	*ft_lstnew2(char **s,int in, int out);
