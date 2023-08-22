@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/21 19:45:02 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/22 22:28:15 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,18 +98,18 @@ char	*check_expend(char *s, t_list **lst, int j)
 	}
 	return(all);
 }
-int ft_word(char *s, t_list **lst)
+int ft_word(char *s, t_env *env, t_list **lst)
 {
 	char *wexp;
 
 	quote(s);
 	if(end_struct(lst) == 5)
-		return(ft_lstadd_back(lst, ft_lstnew(check_expend(s, lst , 2), -1)), 1);
+		return(ft_lstadd_back(lst, ft_lstnew(check_expend(s, lst , 2), -1, env)), 1);
 	wexp = check_expend(s, lst, 1);
 	if(end_struct(lst) > 1)
-		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
+		ft_lstadd_back(lst, ft_lstnew(wexp, -1, env));
 	else
-		ft_lstadd_back(lst, ft_lstnew(wexp, 0));
+		ft_lstadd_back(lst, ft_lstnew(wexp, 0, env));
 	if ((*lst)->token == 1)
 		return(ft_putstr_fd("syntax error near |", 2), 0);
 	return(1);

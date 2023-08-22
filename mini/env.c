@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 11:30:54 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/22 22:29:59 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,25 +87,24 @@ char *get_value(char *str)
     return (value);
 }
 
-t_env *get_environ(t_list **lst)
+t_env *get_environ()
 {
     extern char	**environ;
+    t_env *envi;
     int i;
     char *name;
     char *value;
     i = 1;
     name = get_name(environ[i]);
     value = get_value(environ[i]);
-    (*lst)->content = NULL;
-	(*lst)->next = NULL;
-    (*lst)->envi = ft_lstnew1(name, value);
+    envi = ft_lstnew1(name, value);
     while(environ[i])
     {
         name = get_name(environ[i]);
         value = get_value(environ[i]);
-        ft_lstdadd_back1(&(*lst)->envi, ft_lstnew1(name, value));
+        ft_lstdadd_back1(&envi, ft_lstnew1(name, value));
         i++;
     }
-    return ((*lst)->envi);
+    return (envi);
 }
 //shlvl=1

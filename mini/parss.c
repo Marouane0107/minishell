@@ -6,29 +6,26 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 12:08:06 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/22 22:29:20 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*treatin(char *s)
+t_list *treatin(char *s,t_env *env)
 {
 	int		i;
+	t_list *lst;
 	// int		j;
 	char	**p;
-	t_list	*lst;
-
 	i = 0;
-	lst = malloc(sizeof(t_list));
-		if(!lst)
-			return (0);
-	lst->envi = get_environ(&lst);
+	lst = NULL;
 	p = ft_split(s, ' ');
 	// j = 0;
+	i = 0;
 	while (p[i])
 	{
-		if (!detach_separted(p[i], &lst))
+		if (!detach_separted(p[i], env, &lst))
 			return (0);
 		i++;
 	}
@@ -91,26 +88,49 @@ int	fil_env(t_list **lst)
 	(*lst)->next = NULL;
 	return (1);
 }
-t_data	*pparss(char *input)
+void ft_free_linkdlist(t_data *data, t_list *lst)
 {
-	t_list	*lst;
+	t_list *tmp;
+	t_data *tmp2;
+	tmp = lst;
+	tmp2 = data;
+	while (tmp)
+	{
+		lst = lst->next;
+		free(tmp->content);
+		tmp->content = NULL;
+		free(tmp);
+		tmp = lst;
+	}
+	while (tmp2)
+	{
+		data = data->next;
+		free(tmp2->cmd);
+		tmp2->cmd = NULL;
+		free(tmp2);
+		tmp2 = data;
+	}
+}
+
+t_data	*pparss(char *input, t_env *env)
+{
 	t_data *data;
 	// int	i;
-	
+	t_list *tmp;
 	// i = 0;
 	if (!input || !*input)
 		return (0);
 	if (!quote(input))
 		return (0);
-	lst = treatin(input);
-	if (!lst)
+	tmp = treatin(input, env);
+	if (!tmp)
 		return (0);
-	data = convert_lst(lst);
-	// while (lst)
+	data = convert_lst(tmp);
+	// while (tmp)
 	// {
-	// 	printf("%s\n", (lst)->content);
-	// 	printf("%d\n", (lst)->token);
-	// 	lst = (lst)->next;
+	// 	printf("%s\n", (tmp)->content);
+	// 	printf("%d\n", (tmp)->token);
+	// 	tmp = (tmp)->next;
 	// }
 	return(data);
 }
