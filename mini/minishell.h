@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 22:28:45 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/24 23:42:01 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,37 +69,45 @@ typedef struct s_list
 }					t_list;
 
 
+t_env *ft_lstdadd_back1(t_env **lst, t_env *new);
+t_env	*ft_lstnew1(char *name, char *value);
+t_env	*get_environ();
+t_list	*ft_lstnew(char *s,int content, t_env *envi);
+t_list	*treatin(char *s,t_env *env);
+t_data	*pparss(char *input, t_env *env);
+t_data	*convert_lst(t_list *lst);
+t_data	*parss(void);
+t_data	*ft_lstnew2(char **s,int in, int out);
+
+void	add_node(t_list **head, char *content, int token);
 void	remove_node(t_data *data, char *name);
+void	ft_free_linkdlist(t_data *data, t_list *lst);
 void	ft_unset(t_data *cmd);
 void	ft_env(t_data *data);
 void	ft_pwd(void);
 void	ft_cd(t_data *data);
 void    ft_exit(int status);
 void	ft_echo(t_data *data);
-t_list *treatin(char *s,t_env *env);
-void ft_free_linkdlist(t_data *data, t_list *lst);
-t_data	*pparss(char *input, t_env *env);
-t_data    *convert_lst(t_list *lst);
-t_env *get_environ();
-int	get_exp(char *s, int j, char *q, t_list *lst);
-t_data	*parss(void);
-char	*check_expend(char *s, t_list **lst, int j);
-int	ft_lstsize(t_data *lst);
-t_data	*ft_lstnew2(char **s,int in, int out);
+void	ft_export(t_data *data);
+void    ft_setenv(t_data **data, char *s, char *value);
 void	ft_lstadd_back2(t_data **lst, t_data *new);
-int ft_word(char *s, t_env *env, t_list **lst);
-int					fil_env(t_list **lst);
-int	detach_separted(char *str, t_env *env, t_list **lst);
-int					end_struct(t_list **lst);
-int					ft_len(char *str);
-int					ft_count(char *str);
-t_list	*ft_lstnew(char *s,int content, t_env *envi);
-void				ft_lstadd_back(t_list **lst, t_list *new);
-void				ft_lstadd_front(t_list **st_a, t_list *new);
-char				*searsh_env(char *c, t_env *env);
-int					syntax_error(char *str);
-int					check_spacial(char *str);
-void				add_node(t_list **head, char *content, int token);
+void	ft_lstadd_back(t_list **lst, t_list *new);
+void	ft_lstadd_front(t_list **st_a, t_list *new);
+
+char	*check_expend(char *s, t_list **lst, int j);
+char	*searsh_env(char *c, t_env *env);
+
+int		get_exp(char *s, int j, char *q, t_list *lst);
+int		ft_lstsize(t_data *lst);
+int		ft_word(char *s, t_env *env, t_list **lst);
+int		fil_env(t_list **lst);
+int		detach_separted(char *str, t_env *env, t_list **lst);
+int		end_struct(t_list **lst);
+int		ft_len(char *str);
+int		ft_count(char *str);
+int		syntax_error(char *str);
+int		check_spacial(char *str);
+
 // typedef struct s_list
 // {
 // 	char			*content;

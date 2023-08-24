@@ -1,8 +1,11 @@
 CC = gcc
+
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+
 NAME = minishell
-SRCS = main.c linkd_list.c utils.c utils1.c parss.c utils2.c utils3.c env.c ../builtins/cd.c ../builtins/env.c \
-		../builtins/echo.c ../builtins/exit.c ../builtins/pwd.c ../builtins/unset.c 
+
+SRCS = main.c linkd_list.c utils.c utils1.c parss.c utils2.c utils3.c get_env.c ../builtins/cd.c ../builtins/env.c \
+		../builtins/echo.c ../builtins/exit.c ../builtins/pwd.c ../builtins/unset.c ../builtins/export.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -19,4 +22,5 @@ clean:
 fclean: clean
 	@rm -f $(NAME)
 	@ rm -f ./libft/libft.a
+
 re: fclean all
