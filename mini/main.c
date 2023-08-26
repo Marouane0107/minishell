@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:53:13 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/24 21:49:31 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/26 02:33:33 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ void	cmd_check(t_data *data)
 		ft_unset(data);
 	else if (ft_strcmp(data->cmd[0], "exit") == 0)
 		ft_exit(0);
-	// else
+	else
+		ft_exec(data);
 	// 	printf("%s: command not found\n", data->cmd[0]);
 }
-
+int status; 
 int	main(void)
 {
 	char	*input;

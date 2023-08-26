@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 01:10:02 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/21 10:32:30 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/26 01:48:36 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ static int	ft_count(char const *s, char c)
 	}
 	return (count);
 }
-int  char_check(char c)
+int  char_check(char c, char s)
 {
+	if(c == s)
+		return (1);
 	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
 		return (1);
 	return (0);
@@ -65,9 +67,8 @@ static char	**ft_len(char const *s, char c, char **ps)
 		while (s[i] != c && s[i])
 		{
 			i++;
-			if (char_check(s[i]) || s[i] == '\0')
+			if (char_check(s[i], c) || s[i] == '\0')
 			{
-				printf("[%c]\n", s[i]);
 				ps[j] = ft_substr(s, e, (i - e));
 				if (ps[j] == 0)
 					return (ffree(ps), NULL);
