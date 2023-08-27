@@ -6,38 +6,22 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/08/26 02:32:31 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/27 03:53:03 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	get_path(t_data *data)
-{
-	t_env	*tmp;
-	char	*path;
-
-	tmp = data->env;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->name, "PATH"))
-		{
-			path = ft_strdup(tmp->value);
-			break ;
-		}
-		tmp = tmp->next;
-	}
-	data->path = ft_split(path, ':');
-}
-
 void	exec_cmd(t_data *data)
 {
 	int		i;
+	char	*path;
 	char	*path_cmd;
 	char	*cmd_path;
 
 	i = 0;
-	get_path(data);
+	path = getenv("PATH");
+	data->path = ft_split(path, ':');
 	while (data->path[i])
 	{
 		cmd_path = ft_strjoin(data->path[i], "/");
@@ -55,21 +39,89 @@ void	exec_cmd(t_data *data)
 	exit(127);
 }
 
+// bad file descriptor error
+
+void	changing_files(t_data *data, int fd[2])
+{
+	printf("in = %d\n", data->in);
+	printf("out = %d\n", data->out);
+	if (data->in != 0)
+	{
+		if (data->in > 0)
+		{
+			if (dup2(data->in, 0) == -1)
+				perror("dup2");
+		}
+		if (data->in == -2 || data->in > 0)
+		{
+			if (dup2(fd[1], 0) == -1)
+				perror("dup2");
+			close(fd[0]);
+		}
+		if (data->in > 0)
+			close(data->in);
+		data->in = 0;
+	}
+	if (data->out != 1)
+	{
+		if (data->out > 2)
+		{
+			if (dup2(data->out, 1) == -1)
+				perror("dup2");
+		}
+		if (dup2(fd[0], 1) == -1)
+			perror("dup2");
+		close(fd[1]);
+		if (data->out > 2)
+			close(data->out);
+	}
+}
+
+void	ft_fork(t_data *data, pid_t *id, int fd[2])
+{
+	*id = fork();
+	if (*id == -1)
+	{
+		perror("fork");
+		exit(1);
+	}
+	if (*id == 0)
+	{
+		changing_files(data, fd);
+		exec_cmd(data);
+	}
+	else if (*id > 0)
+	{
+		close(fd[1]);
+		close(fd[0]);
+		waitpid(*id, &status, 0);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+	}
+}
+
 void	ft_exec(t_data *data)
 {
 	pid_t	pid;
-	int		status;
+	t_data	*tmp;
+	int		fd[2];
 
-	pid = fork();
-	if (pid == 0)
-		exec_cmd(data);
-	else if (pid > 0)
+	tmp = data;
+	if (data->cmd && data->next)
 	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-			
+		while (tmp)
+		{
+			pipe(fd);
+			if(pipe(fd) == -1)
+				perror("pipe");
+			ft_fork(tmp, &pid, fd);
+			tmp = tmp->next;
+			if(tmp)
+				tmp->in = -2;
+		}
 	}
 	else
-		printf("Error\n");
+	{
+		ft_fork(data, &pid, fd);
+	}
 }

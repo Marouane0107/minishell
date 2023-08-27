@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/26 02:34:37 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/27 01:31:46 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 void	ft_lstadd_front(t_list **st_a, t_list *new);
 void	ft_exec(t_data *data);
 void	exec_cmd(t_data *data);
-void	get_path(t_data *data);
 
 char	*check_expend(char *s, t_list **lst, int j);
 char	*searsh_env(char *c, t_env *env);
