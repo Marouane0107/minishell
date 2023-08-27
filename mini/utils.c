@@ -51,7 +51,7 @@ int	syntax_error(char *s)
 		return (4);
 	else if (ft_strcmp(s, "|<") == 0)
 		return (2);
-	else if (ft_strcmp(s, ">")== 0)
+	else if (ft_strcmp(s, ">") == 0)
 		return (3);
 	else if (ft_strcmp(s, "<") == 0)
 		return (2);

@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/27 00:53:02 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/27 23:49:08 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
 
 int noptions(t_list *lst)
 {
@@ -26,26 +27,43 @@ int noptions(t_list *lst)
     }
     return (i);
 }
+void her(int signum)
+{
+    (void)signum;
+     close(0);
+     global.g = 1;
+     write(1, "\n", 1);
+}
 char	*stock(char *av, t_list *lst)
 {
 	char	*line;
-	char	*tmp;
     char *all;
+    char *tmp;
 
     all = NULL;
-	line = readline("here_doc: ");
-	while (line)
+    int i;
+    line = NULL;
+    i  = dup(0);
+    global.g = 0;
+    signal(SIGINT, her);
+	while (!global.g)
 	{
-    	if (ft_strcmp(line, av) == 0)
+		line = readline("here_doc: ");
+    	if (ft_strcmp(line, av) == 0 || !line)
 			break ;
-        if(!ft_strchr(line, '\'') && !ft_strchr(line, '\"'))
+        if(line && lst->next->token != -2)
+        {
+            quote(line);
             line = check_expend(line, &lst ,0);
+            printf("line = %s\n", line);
+        }
 		tmp = ft_strjoin(line, "\n");
         all = ft_strjoin(all, tmp);
-		line = readline("here_doc: ");
 		free(tmp);
 	}
-	free(line);
+    dup2(i, 0);
+    close(i);
+    signal(SIGINT, sigint_handler);
     return (all);
 }
 
@@ -71,14 +89,14 @@ char 	**open_here(t_list *lst)
     data = malloc(sizeof(char *) * (count_x(lst, 5) + 1));
     if(!data)
         return (0);
-    while(lst)
+    while(lst && !global.g)
     {
         if(lst->token == 5)
         {
             data[i] = stock(lst->next->content, lst);
             i++;
         }
-        lst = lst->next;
+        lst = lst->next;signal(SIGINT, sigint_handler);
     }
     data[i] = NULL;
     return (data);
@@ -87,7 +105,8 @@ int openin(t_list *tmp, char **s, int j)
 {
     int fd;
     char *here;
-    if(tmp->token == 5)
+    fd = 0;
+    if(tmp->token == 5 && !global.g)
     {
         here = ft_strjoin("/tmp/her", ft_itoa(j));
         fd = open(here, O_RDWR | O_CREAT | O_TRUNC, 0644);
@@ -95,7 +114,7 @@ int openin(t_list *tmp, char **s, int j)
             return (perror("open"), -2);
         ft_putstr_fd(s[j], fd);
     }
-    else
+    else if(!global.g)
     {
         fd = open(tmp->next->content, O_RDONLY);
         if(fd == -1)
@@ -107,14 +126,14 @@ int openout(t_list *lst)
 {
     int fd;
     fd = 1;
-    if(lst->token == 3)
+    if(lst->token == 3 && !global.g)
     {
-        fd = open(lst->next->content, O_RDWR | O_CREAT | O_APPEND, 0644);
+        fd = open(lst->next->content, O_RDWR | O_CREAT, 0644);
         if(fd == -1)
             return (perror("open"), -2);
 
     }
-    else if(lst->token == 4)
+    else if(lst->token == 4 && !global.g)
     {
         fd = open(lst->next->content, O_RDWR | O_CREAT | O_APPEND, 0644);
         if(fd == -1)
@@ -179,12 +198,12 @@ void  add_cmd(char  **cmd, t_list *lst, t_data **tmp)
     
     if(lst->token == 0)
     {
-        *cmd = ft_strjoin(*cmd, " ");
-        *cmd = ft_strjoin(*cmd, lst->content);
+        *cmd = ft_strjoin(*cmd, ft_str(-122));
+        *cmd = ft_strjoin(*cmd, (lst->content));
     }
     if(*cmd && (lst->next == NULL || lst->token == 1))
     {
-        (*tmp)->cmd = ft_split(*cmd, ' ');
+        (*tmp)->cmd = ft_split(*cmd, -122);
         free(*cmd);
         *cmd = NULL;
     }
@@ -206,7 +225,7 @@ void  fill(t_data **data, t_list *lst, char **s)
             if(tmp->out == 1)
                 tmp->out = 0;
             tmp = tmp->next;
-            tmp->in = 0;
+            tmp->in = 1;
         }
         else if(lst->token > 1)
         {
@@ -221,27 +240,32 @@ t_data    *convert_lst(t_list *lst)
 {
     char **s;
     t_data *data;
-    t_data *tmp;
     data = malloc(sizeof(t_data));
     if(!data)
         return (0);
-    tmp = data;
-    allocate(&tmp, count_x(lst, 1) + 1);
+    allocate(&data, count_x(lst, 1) + 1);
     s = open_here(lst);
-    fill(&tmp, lst, s);
+    fill(&data, lst, s);
+    ffree(s);
     // int i = 0;
-    // while(tmp)
+    // while(data)
     // {
     //      i = 0;
-    //     printf("in = %d\n", tmp->in);
-    //     printf("out = %d\n", tmp->out);
-    //     while(tmp->cmd && tmp->cmd[i])
+    //     printf("in = %d\n", data->in); 
+    //     printf("out = %d\n", data->out); 
+    //     while(data->cmd && data->cmd[i])
     //     {
-    //         printf("cmd = [%s]\n", tmp->cmd[i]);
+    //         printf("cmd = [%s]\n", data->cmd[i]);
     //         i++;
     //     }
-    //     tmp = tmp->next;
+    //     data = data->next;
     // }
-    data->env = lst->envi;
-    return (data);
+    return(data);
 }
+// " '$USER' "
+//  echo ''''''''''$USER''''''''''
+// remove space '\" ' " \"\"" split with space
+// "$USER""Users/$USER/file""'$USER'"'$USER
+//                | not expend
+// secend third not expend echo "$USER$USER$USER"
+// echo " $USER  "'$PWD'	no exp

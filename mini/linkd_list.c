@@ -11,7 +11,7 @@ void	ft_free(char **p)
 	}
 	free(p);
 }
-t_list	*ft_lstnew(char *s,int content, t_env *envi)
+t_list	*ft_lstnew(char *s,int content)
 {
 	t_list	*node;
 
@@ -21,7 +21,6 @@ t_list	*ft_lstnew(char *s,int content, t_env *envi)
 		return (0);
 	if (node)
 	{
-		node->envi = envi;
 		node->token = content;
         node->content = s;
 		node->next = NULL;
@@ -91,9 +90,11 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 
 	if (!lst || !new)
 		return ;
-	if (!lst || !(*lst))
+	if (!(*lst)->content)
 	{
-		*lst = new;
+		(*lst)->content = new->content;
+		(*lst)->token = new->token;
+		(*lst)->next = new->next;
 	}
 	else
 	{

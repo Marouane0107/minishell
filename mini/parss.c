@@ -3,34 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parss.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 23:35:28 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/28 00:24:57 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list *treatin(char *s,t_env *env)
+t_list	*treatin(char *s)
 {
 	int		i;
-	t_list *lst;
-	// int		j;
 	char	**p;
+	t_list	*lst;
+
 	i = 0;
-	lst = NULL;
+	lst = malloc(sizeof(t_list));
+	if(!lst)
+		return (0);
+	lst = get_environ(&lst);
 	p = ft_split(s, ' ');
-	// j = 0;
-	i = 0;
 	while (p[i])
 	{
-		if (!detach_separted(p[i], env, &lst))
+		if (!detach_separted(p[i], &lst))
 			return (0);
 		i++;
 	}
 	if (end_struct(&lst) > 0)
 		return (ft_putstr_fd("minishell$ syntax errorF\n", 2), NULL);
+	ffree(p);
 	return (lst);
 }
 int	ins(char c, int m, int j)
@@ -42,7 +44,7 @@ int	ins(char c, int m, int j)
 	else
 		return (0);
 }
-char	*quote(char *in)
+int	quote(char *in)
 {
 	int	i;
 	int	m;
@@ -59,80 +61,109 @@ char	*quote(char *in)
 			j++;
 		if (ins(in[i], m, j))
 		{
-			in[i] = in[i] * -1;
+				in[i] = in[i] * -1;
 		}
 		i++;
 	}
 	if (j % 2 != 0 || m % 2 != 0)
-		return (write(2, "minishell$ syntax error Q\n", 25), NULL);
-	return (in);
-}
-int	fil_env(t_list **lst)
-{
-	extern char	**environ;
-	int			i;
-
-	i = 0;
-	*lst = malloc(sizeof(t_list));
-	while (environ[i])
-		i++;
-	(*lst)->env = malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (environ[i])
-	{
-		(*lst)->env[i] = ft_strdup(environ[i]);
-		i++;
-	}
-	(*lst)->env[i] = NULL;
-	(*lst)->content = NULL;
-	(*lst)->next = NULL;
+		return (0);
 	return (1);
 }
-void ft_free_linkdlist(t_data *data, t_list *lst)
+void free_env(t_env *env)
 {
-	t_list *tmp;
-	t_data *tmp2;
-	tmp = lst;
-	tmp2 = data;
-	while (tmp)
+	t_env *tmp;
+	while(env)
 	{
-		lst = lst->next;
-		free(tmp->content);
-		tmp->content = NULL;
+		tmp = (env);
+		(env) = (env)->next;
+		if(env)
+		{
+		free(tmp->name);
+		free(tmp->value);
+		}
 		free(tmp);
-		tmp = lst;
-	}
-	while (tmp2)
-	{
-		data = data->next;
-		free(tmp2->cmd);
-		tmp2->cmd = NULL;
-		free(tmp2);
-		tmp2 = data;
 	}
 }
-
-t_data	*pparss(char *input, t_env *env)
+void free_data(t_data *data)
 {
+	t_data *tmp;
+	while(data)
+	{
+		tmp = data;
+		data = data->next;
+		if(data)
+			ffree(data->cmd);
+		free(tmp);
+	}
+}
+void free_lst(t_list *lst)
+{
+	t_list *tmp;
+	while(lst)
+	{
+		tmp = (lst);
+		(lst) = (lst)->next;
+		if(lst)
+		{
+			free_env((lst)->envi);
+			free(tmp->content);
+		}
+		free(tmp);
+	}
+}
+int	pparss(char *input)
+{
+	t_list	*lst;
 	t_data *data;
 	// int	i;
-	t_list *tmp;
+	
 	// i = 0;
-	if (!input || !*input)
+	if (!*input)
 		return (0);
 	if (!quote(input))
+		return (ft_putstr_fd("minishell$: syntax error\n", 2), 0);
+	lst = treatin(input);
+	if (!lst)
 		return (0);
-	tmp = treatin(input, env);
-	if (!tmp)
-		return (0);
-	data = convert_lst(tmp);
-	// while (tmp)
+	data = convert_lst(lst);
+	free_lst(lst);
+	free_data(data);
+	lst = NULL;
+	// while (lst)
 	// {
-	// 	printf("%s\n", (tmp)->content);
-	// 	printf("%d\n", (tmp)->token);
-	// 	tmp = (tmp)->next;
+	// 	printf("--%s+\n", (lst)->content);
+	// 	printf("---%d++\n", (lst)->token);
+	// 	lst = (lst)->next;
 	// }
-	return(data);
+	return (1);
+}
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	if(!global.g)
+		ft_putstr_fd("\n", 1);
+    rl_replace_line("", 0);
+	rl_on_new_line();
+    rl_redisplay();
+}
+
+void	parss(void)
+{
+	char	*input;
+	input = NULL;
+	while (1)
+	{
+		signal(SIGINT, sigint_handler);
+		input = readline("minishell$ ");
+		global.g = 0;
+		if (!input)
+			exit(0);
+		add_history(input);
+		if(ft_strcmp(input, "exit") == 0)
+			exit(0);
+		if (!pparss(input))
+			continue ;
+	}
 }
 // syntax error $cs'\'
 // syntax error $cs'!'

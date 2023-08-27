@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 01:10:02 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/26 01:47:28 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/27 23:52:38 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	ffree(char **p)
+void	ffree(char **p)
 {
 	int	i;
 
@@ -44,11 +44,16 @@ static int	ft_count(char const *s, char c)
 	}
 	return (count);
 }
-int check_char(char c, char s)
+int check_char(char c,char s)
 {
-	if(c == s)
-		return (1);
-	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
+	if(s == c)
+		return(1);
+	if(s < 0)
+	{
+		if(s == c)
+			return(1);
+	}
+	else if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
 		return (1);
 	return (0);
 }

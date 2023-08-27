@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 22:29:59 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/28 00:15:00 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ t_env *ft_lstnew1(char *name, char *value)
         return (0);
     if(node)
     {
-        node->name = name;
-        node->value = value;
+        node->name = ft_strdup(name);
+        node->value = ft_strdup(value);
         node->next = NULL;
     }
     return (node);
@@ -87,24 +87,29 @@ char *get_value(char *str)
     return (value);
 }
 
-t_env *get_environ()
+t_list *get_environ(t_list **lst)
 {
     extern char	**environ;
-    t_env *envi;
     int i;
     char *name;
     char *value;
     i = 1;
     name = get_name(environ[i]);
     value = get_value(environ[i]);
-    envi = ft_lstnew1(name, value);
+    (*lst)->content = NULL;
+	(*lst)->next = NULL;
+    (*lst)->envi = ft_lstnew1(name, value);
+    free(name);
+    free(value);
     while(environ[i])
     {
         name = get_name(environ[i]);
         value = get_value(environ[i]);
-        ft_lstdadd_back1(&envi, ft_lstnew1(name, value));
+        ft_lstdadd_back1(&(*lst)->envi, ft_lstnew1(name, value));
+        free(name);
+        free(value);
         i++;
     }
-    return (envi);
+    return (*lst);
 }
 //shlvl=1

@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/27 01:31:46 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/27 23:42:52 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
 # define word 0
 # define PIPE 1
 # define redin 2
@@ -35,28 +37,35 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-
-#define BUFFER_SIZE 102400
-extern int	status;
-
-char				*quote(char *in);
+int	quote(char *in);
+int					pparss(char *input);
+void				parss(void);
+void	ffree(char **p);
 int					ft_strchrr(char *s, char c);
-typedef struct s_env
-{
-	char *value;
-	char *name;
-	struct s_env *next;
-}		t_env;
 typedef struct s_data
 {
-	t_env *env;
-	char **path;
+	int status;
 	char **cmd;
 	int in;
 	int out;
 	struct s_data	*next;
 	
 }	t_data;
+
+typedef struct s_global
+{
+	int g;
+	int ex;
+}	t_global;
+
+extern t_global global;
+
+typedef struct s_env
+{
+	char *value;
+	char *name;
+	struct s_env *next;
+}		t_env;
 
 typedef struct s_list
 {
@@ -69,49 +78,30 @@ typedef struct s_list
 	t_env 			*envi;
 	struct s_list	*next;
 }					t_list;
-
-
-t_env *ft_lstdadd_back1(t_env **lst, t_env *new);
-t_env	*ft_lstnew1(char *name, char *value);
-t_env	*get_environ();
-t_list	*ft_lstnew(char *s,int content, t_env *envi);
-t_list	*treatin(char *s,t_env *env);
-t_data	*pparss(char *input, t_env *env);
-t_data	*convert_lst(t_list *lst);
-t_data	*parss(void);
-t_data	*ft_lstnew2(char **s,int in, int out);
-
-void	add_node(t_list **head, char *content, int token);
-void	remove_node(t_data *data, char *name);
-void	ft_free_linkdlist(t_data *data, t_list *lst);
-void	ft_unset(t_data *cmd);
-void	ft_env(t_data *data);
-void	ft_pwd(void);
-void	ft_cd(t_data *data);
-void    ft_exit(int status);
-void	ft_echo(t_data *data);
-void	ft_export(t_data *data);
-void    ft_setenv(t_data **data, char *s, char *value);
-void	ft_lstadd_back2(t_data **lst, t_data *new);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstadd_front(t_list **st_a, t_list *new);
-void	ft_exec(t_data *data);
-void	exec_cmd(t_data *data);
-
+t_data    *convert_lst(t_list *lst);
+char	*ft_get_line(char *s);
+char	*ft_str(char s);
+char	*get_next_line(int fd);
+void	sigint_handler(int sig);
+int	get_exp(char *s, int j, char *q, t_list *lst);
+t_list *get_environ(t_list **lst);
 char	*check_expend(char *s, t_list **lst, int j);
-char	*searsh_env(char *c, t_env *env);
-
-int		get_exp(char *s, int j, char *q, t_list *lst);
-int		ft_lstsize(t_data *lst);
-int		ft_word(char *s, t_env *env, t_list **lst);
-int		fil_env(t_list **lst);
-int		detach_separted(char *str, t_env *env, t_list **lst);
-int		end_struct(t_list **lst);
-int		ft_len(char *str);
-int		ft_count(char *str);
-int		syntax_error(char *str);
-int		check_spacial(char *str);
-
+int	ft_lstsize(t_data *lst);
+t_data	*ft_lstnew2(char **s,int in, int out);
+void	ft_lstadd_back2(t_data **lst, t_data *new);
+int					ft_word(char *s, t_list **lst);
+int					fil_env(t_list **lst);
+int					detach_separted(char *str, t_list **lst);
+int					end_struct(t_list **lst);
+int					ft_len(char *str);
+int					ft_count(char *str);
+t_list				*ft_lstnew(char *s, int content);
+void				ft_lstadd_back(t_list **lst, t_list *new);
+void				ft_lstadd_front(t_list **st_a, t_list *new);
+char				*searsh_env(char *c, t_env *env);
+int					syntax_error(char *str);
+int					check_spacial(char *str);
+void				add_node(t_list **head, char *content, int token);
 // typedef struct s_list
 // {
 // 	char			*content;
@@ -119,6 +109,12 @@ int		check_spacial(char *str);
 // 	int 			in;
 // 	int 			out;
 // 	struct s_list	*next;
-// }					t_list;
+// }t_list;
 
+
+				
+
+
+
+#endif
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:23:34 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 22:27:05 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/27 23:23:14 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	end_struct(t_list **lst)
 {
 	t_list *tmp;
 	tmp = *lst;
-	if (!lst || !(*lst))
+	if (!(*lst)->content)
 		return (-1);
 	while (tmp->next)
 		tmp = tmp->next;
@@ -65,7 +65,7 @@ int	end_struct(t_list **lst)
 }
 
 
-int	pipe_red(char *c, t_env *env, t_list **lst)
+int	pipe_red(char *c, t_list **lst)
 {
 	int		j;
 	
@@ -77,8 +77,8 @@ int	pipe_red(char *c, t_env *env, t_list **lst)
 			ft_putstr_fd("syntax error P\n", 2);
 			return (0);
 		}
-		ft_lstadd_back(lst, ft_lstnew("|", 1, env));
-		ft_lstadd_back(lst, ft_lstnew(c + 1, j, env));
+		ft_lstadd_back(lst, ft_lstnew("|", 1));
+		ft_lstadd_back(lst, ft_lstnew(c + 1, j));
 	}
 	else
 	{
@@ -87,12 +87,12 @@ int	pipe_red(char *c, t_env *env, t_list **lst)
 			ft_putstr_fd("syntax errorT\n", 2);
 			return (0);
 		}
-		ft_lstadd_back(lst, ft_lstnew(c, j, env));
+		ft_lstadd_back(lst, ft_lstnew(c, j));
 	}
 	return (1);
 }
 
-int	add_attach(char **c, t_env *env, t_list **lst)
+int	add_attach(char **c, t_list **lst)
 {
 	int	i;
 
@@ -102,12 +102,12 @@ int	add_attach(char **c, t_env *env, t_list **lst)
 	{
 		if (check_spacial(c[i]))
 		{
-			if (!pipe_red(c[i], env, lst))
+			if (!pipe_red(c[i], lst))
 				return (0);
 		}
 		else
 		{
-			if(!ft_word(c[i], env, lst))
+			if(!ft_word(c[i], lst))
 				return (0);
 			// ft_lstadd_back(lst, ft_lstnew(c[i], 0));
 		}
@@ -116,7 +116,7 @@ int	add_attach(char **c, t_env *env, t_list **lst)
 	return (1);
 }
 //check if the word is a special character and attached to it
-int	detach_separted(char *str, t_env *env, t_list **lst)
+int	detach_separted(char *str, t_list **lst)
 {
 	char **c;
 
@@ -132,7 +132,8 @@ int	detach_separted(char *str, t_env *env, t_list **lst)
 		m++;
 	}
 	c[m] = NULL;
-	if (!add_attach(c, env, lst))
+	if (!add_attach(c, lst))
 		return (0);
+	ffree(c);
 	return (1);
 }
