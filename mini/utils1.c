@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:23:34 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/27 23:23:14 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/28 20:59:27 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,6 @@ int	detach_separted(char *str, t_list **lst)
 	c[m] = NULL;
 	if (!add_attach(c, lst))
 		return (0);
-	ffree(c);
+	// ffree(c);
 	return (1);
 }

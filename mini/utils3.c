@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/27 23:49:08 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/28 17:05:15 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,8 @@ void  allocate(t_data **data, int i)
     (*data)->cmd = NULL;
     (*data)->next = NULL;
     tmp = *data;
-    while(i -1 > 0)
+    printf("%d\n", i);
+    while(i - 1 > 0)
     {
         ft_lstadd_back2(&tmp, ft_lstnew2(NULL, -1, 1));
         tmp = tmp->next;
@@ -247,19 +248,20 @@ t_data    *convert_lst(t_list *lst)
     s = open_here(lst);
     fill(&data, lst, s);
     ffree(s);
-    // int i = 0;
-    // while(data)
-    // {
-    //      i = 0;
-    //     printf("in = %d\n", data->in); 
-    //     printf("out = %d\n", data->out); 
-    //     while(data->cmd && data->cmd[i])
-    //     {
-    //         printf("cmd = [%s]\n", data->cmd[i]);
-    //         i++;
-    //     }
-    //     data = data->next;
-    // }
+    data->env = lst->envi;
+    int i = 0;
+    while(data)
+    {
+         i = 0;
+        printf("in = %d\n", data->in); 
+        printf("out = %d\n", data->out); 
+        while(data->cmd && data->cmd[i])
+        {
+            printf("cmd = [%s]\n", data->cmd[i]);
+            i++;
+        }
+        data = data->next;
+    }
     return(data);
 }
 // " '$USER' "

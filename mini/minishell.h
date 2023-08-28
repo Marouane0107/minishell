@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/27 23:42:52 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:58:23 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,10 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
-int	quote(char *in);
-int					pparss(char *input);
+int		quote(char *in);
 void				parss(void);
 void	ffree(char **p);
 int					ft_strchrr(char *s, char c);
-typedef struct s_data
-{
-	int status;
-	char **cmd;
-	int in;
-	int out;
-	struct s_data	*next;
-	
-}	t_data;
 
 typedef struct s_global
 {
@@ -67,6 +57,16 @@ typedef struct s_env
 	struct s_env *next;
 }		t_env;
 
+typedef struct s_data
+{
+	int status;
+	t_env *env;
+	char **cmd;
+	int in;
+	int out;
+	struct s_data	*next;
+	
+}	t_data;
 typedef struct s_list
 {
 	int g;
@@ -79,12 +79,13 @@ typedef struct s_list
 	struct s_list	*next;
 }					t_list;
 t_data    *convert_lst(t_list *lst);
+int	pparss(char *input, t_env *env);
 char	*ft_get_line(char *s);
 char	*ft_str(char s);
 char	*get_next_line(int fd);
 void	sigint_handler(int sig);
 int	get_exp(char *s, int j, char *q, t_list *lst);
-t_list *get_environ(t_list **lst);
+t_env *get_environ();
 char	*check_expend(char *s, t_list **lst, int j);
 int	ft_lstsize(t_data *lst);
 t_data	*ft_lstnew2(char **s,int in, int out);

@@ -6,23 +6,18 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/28 00:24:57 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:54:52 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list	*treatin(char *s)
+t_list	*treatin(char *s, t_list *lst)
 {
 	int		i;
 	char	**p;
-	t_list	*lst;
 
 	i = 0;
-	lst = malloc(sizeof(t_list));
-	if(!lst)
-		return (0);
-	lst = get_environ(&lst);
 	p = ft_split(s, ' ');
 	while (p[i])
 	{
@@ -105,30 +100,33 @@ void free_lst(t_list *lst)
 		(lst) = (lst)->next;
 		if(lst)
 		{
-			free_env((lst)->envi);
 			free(tmp->content);
 		}
 		free(tmp);
 	}
 }
-int	pparss(char *input)
+int	pparss(char *input, t_env *env)
 {
 	t_list	*lst;
 	t_data *data;
-	// int	i;
-	
-	// i = 0;
+	lst = malloc(sizeof(t_list));
+	if(!lst)
+		return (0);
+	(lst)->content = NULL;
+	(lst)->next = NULL;
+	lst->envi = env;
 	if (!*input)
 		return (0);
 	if (!quote(input))
 		return (ft_putstr_fd("minishell$: syntax error\n", 2), 0);
-	lst = treatin(input);
+	lst = treatin(input, lst);
 	if (!lst)
 		return (0);
 	data = convert_lst(lst);
 	free_lst(lst);
-	free_data(data);
-	lst = NULL;
+	// free_data(data);
+	(void)data;
+	// list = NULL;
 	// while (lst)
 	// {
 	// 	printf("--%s+\n", (lst)->content);
@@ -149,7 +147,9 @@ void	sigint_handler(int sig)
 
 void	parss(void)
 {
+	t_env	*env;
 	char	*input;
+	env = get_environ();
 	input = NULL;
 	while (1)
 	{
@@ -161,7 +161,7 @@ void	parss(void)
 		add_history(input);
 		if(ft_strcmp(input, "exit") == 0)
 			exit(0);
-		if (!pparss(input))
+		if (!pparss(input, env))
 			continue ;
 	}
 }
