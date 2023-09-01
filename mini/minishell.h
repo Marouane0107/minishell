@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 00:54:18 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/01 19:20:44 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int					ft_countd(char *str);
 t_list				*ft_lstnew(char *s, int content);
 void				ft_lstadd_back(t_list **lst, t_list *new);
 void				ft_lstadd_front(t_list **st_a, t_list *new);
-char	*searsh_env(char *c);
+char	*searsh_env(char *c, int j);
 int					syntax_error(char *str);
 int					check_spacial(char *str);
 void				add_node(t_list **head, char *content, int token);

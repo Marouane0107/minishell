@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 00:43:03 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/01 20:35:01 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*stock(char *av, t_list *lst)
 	}
     return (dup2(i, 0), close(i), all);
 }
-
+ 
 int count_x(t_list *lst, int j)
 {
     t_list *tmp;
@@ -125,7 +125,14 @@ int openin(t_list *tmp, char **s, int j)
 int openout(t_list *lst)
 {
     int fd;
+    int m;
+    m = lst->next->token;
     fd = 1;
+    if (m == -3)
+    {
+        printf("bash: %s: ambiguous redirect\n", lst->next->content);
+        return(-3);
+    }
     if(lst->token == 3 && !g_lobal.g)
     {
         fd = open(lst->next->content, O_RDWR | O_CREAT, 0644);

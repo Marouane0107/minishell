@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/31 23:55:18 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/01 20:51:12 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,11 @@ void	free_lst(t_list *lst)
 	{
 		tmp = lst;
 		lst = lst->next;
-		if (tmp)
-		{
-			if (tmp->content && *tmp->content)
-				free(tmp->content);
-		}
+		// if (tmp)
+		// {
+		// 	if (tmp->content && *tmp->content)
+		// 		free(tmp->content);
+		// }
 		free(tmp);
 	}
 }
