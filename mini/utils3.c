@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 20:35:01 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:53:31 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,17 @@ int noptions(t_list *lst)
         tmp = tmp->next;
     }
     return (i);
+}
+void ft_skip(t_list **lst)
+{
+    while((*lst))
+    {
+        if((*lst)->next && (*lst)->next->content[0] == '|')
+            break;
+        if((*lst)->next == NULL)
+            break;
+        (*lst) = (*lst)->next;
+    }
 }
 void her(int signum)
 {
@@ -131,7 +142,8 @@ int openout(t_list *lst)
     if (m == -3)
     {
         printf("bash: %s: ambiguous redirect\n", lst->next->content);
-        return(-3);
+        ft_skip(&lst);
+        return(1);
     }
     if(lst->token == 3 && !g_lobal.g)
     {
@@ -164,17 +176,6 @@ void  allocate(t_data **data, int i)
     }
 }
 
-void ft_skip(t_list **lst)
-{
-    while((*lst))
-    {
-        if((*lst)->next && (*lst)->next->content[0] == '|')
-            break;
-        if((*lst)->next == NULL)
-            break;
-        (*lst) = (*lst)->next;
-    }
-}
 void handle_tokens(t_list **lst, t_data **data, char **s, int j)
 {
     t_list *tmp;

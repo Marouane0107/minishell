@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 20:58:33 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:52:47 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ char	*searsh_env(char *c, int j)
 			return (ft_strdup(tmp->value));
 		}
 		tmp = tmp->next;
+	}
+	if(j == 11)
+	{
+		// printf("bash: $%s: ambiguous redirect\n", c);
+		return(ft_strjoin("$", c));
 	}
 	return (NULL); 
 }
@@ -178,7 +183,7 @@ int ft_word(char *s, t_list **lst)
 	{
 		wexp = check_expend(s, lst, 11);
 		ex_status(&wexp);
-		if(ft_strchr(wexp, '$'))
+		if(wexp[0] == '$')
 			ft_lstadd_back(lst, ft_lstnew(wexp, -3));
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
 		return(1);
@@ -186,7 +191,10 @@ int ft_word(char *s, t_list **lst)
 	wexp = check_expend(s, lst, 1);
 	ex_status(&wexp);
 	if(!(*wexp) && (ft_strchr(s, '\'') || ft_strchr(s, '\"')))
+	{
+		free(wexp);
 		wexp = ft_strdup("''");
+	}
 	if(end_struct(lst) > 1)
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
 	else
