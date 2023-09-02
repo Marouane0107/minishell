@@ -6,38 +6,11 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 17:23:34 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/30 16:04:39 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 20:10:55 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	ft_countd(char *str)
-{
-	int	i;
-	int	m;
-
-	i = 0;
-	m = 0;
-	while (str[i])
-	{
-		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
-		{
-			while (str[i] == '|' || str[i] == '>' || str[i] == '<')
-				i++;
-			m++;
-		}
-		else if (str[i] != '|' && str[i] != '>' && str[i] != '<')
-		{
-			while (str[i] != '|' && str[i] != '>' && str[i] != '<' && str[i])
-			{
-				i++;
-			}
-			m++;
-		}
-	}
-	return (m);
-}
 
 int	ftlen(char *str)
 {

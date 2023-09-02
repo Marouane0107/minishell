@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 19:20:44 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 21:00:18 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 #  include <unistd.h>
 int					quote(char *in);
 void				parss(void);
+void				ft_free(char **p);
 void				ffree(char **p);
 int					ft_strchrr(char *s, char c);
 
@@ -85,31 +86,49 @@ typedef struct s_data
 
 }					t_data;
 t_data				*convert_lst(t_list *lst);
-void 		msg_error(t_list *lst);
+int 				openout(t_list *lst);
+int 				openin(t_list *tmp, char **s, int j);
+void    			ft_setenv(t_data **data, char *s, char *path);
+t_env 				*ft_lstdadd_back1(t_env **lst, t_env *new);
+t_grbg 				*lst_new(char **p, char *name, char *value);
+t_env 				*ft_lstnew1(char *name, char *value);
+void 				ft_skip(t_list **lst);
+char				*ft_str(char s);
+char				*searsh_env(char *c, int j);
+int					get_exp(char *s, int j, char *q, int m);
+int 				check_single(char *s,int j);
+int 				adge_case(char *s, int j, char *q);
+char 				**open_here(t_list *lst);
+char				*stock(char *av, t_list *lst);
+int 				count_x(t_list *lst, int j);
+void  				fill(t_data **data, t_list *lst, char **s);
+void  				add_cmd(char  **cmd, t_list *lst, t_data **tmp);
+void 				handle_tokens(t_list **lst, t_data **data, char **s, int j);
+void 				msg_error(t_list *lst);
+int					ins(char c, int m, int j);
 void				ft_lstadd(t_grbg **lst, t_grbg *new);
-t_grbg 	*lst_new(char **p, char *name, char *value);
-int					pparss(char *input);
-void 	free_lst(t_list *lst);
+t_grbg 				*lst_new(char **p, char *name, char *value);
+int					distribut(char *input);
+void 				free_lst(t_list *lst);
+ void				free_env(t_env *env);
+ void				free_data(t_data *data);
 char				*ft_get_line(char *s);
 char				*ft_str(char s);
 char				*get_next_line(int fd);
 void				sigint_handler(int sig);
-int	get_exp(char *s, int j, char *q, int m);
+int					get_exp(char *s, int j, char *q, int m);
 t_env				*get_environ(void);
 char				*check_expend(char *s, t_list **lst, int j);
-int					ft_lstsize(t_data *lst);
 t_data				*ft_lstnew2(char **s, int in, int out);
 void				ft_lstadd_back2(t_data **lst, t_data *new);
 int					ft_word(char *s, t_list **lst);
-int					fil_env(t_list **lst);
 int					detach_separted(char *str, t_list **lst);
 int					end_struct(t_list **lst);
 int					ftlen(char *str);
 int					ft_countd(char *str);
 t_list				*ft_lstnew(char *s, int content);
 void				ft_lstadd_back(t_list **lst, t_list *new);
-void				ft_lstadd_front(t_list **st_a, t_list *new);
-char	*searsh_env(char *c, int j);
+char				*searsh_env(char *c, int j);
 int					syntax_error(char *str);
 int					check_spacial(char *str);
 void				add_node(t_list **head, char *content, int token);

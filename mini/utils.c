@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 23:02:42 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/30 10:47:25 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 20:39:56 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	ft_strchrr(char *s, char c)
 	}
 	return (-1);
 }
+
 int	check_spacial(char *s)
 {
 	int	i;
@@ -61,19 +62,33 @@ int	syntax_error(char *s)
 		return (5);
 	return (-1);
 }
-// int	ft_strcmp(char *s1, char *s2)
-// {
-// 	int	i;
 
-// 	i = 0;
-// 	while (s1[i] || s2[i])
-// 	{
-// 		if (s1[i] != s2[i])
-// 			return (0);
-// 		i++;
-// 	}
-// 	return (1);
-// }
+int	ft_countd(char *str)
+{
+	int	i;
+	int	m;
+
+	i = 0;
+	m = 0;
+	while (str[i])
+	{
+		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
+		{
+			while (str[i] == '|' || str[i] == '>' || str[i] == '<')
+				i++;
+			m++;
+		}
+		else if (str[i] != '|' && str[i] != '>' && str[i] != '<')
+		{
+			while (str[i] != '|' && str[i] != '>' && str[i] != '<' && str[i])
+			{
+				i++;
+			}
+			m++;
+		}
+	}
+	return (m);
+}
 
 void	add_node(t_list **head, char *content, int token)
 {

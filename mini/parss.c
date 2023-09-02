@@ -6,24 +6,13 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 19:34:19 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 20:42:14 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	msg_error(t_list *lst)
-{
-	int	i;
 
-	i = end_struct(&lst);
-	if (i == 1)
-		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);
-	else
-		ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
-	if (lst)
-		free_lst(lst);
-}
 t_list	*treatin(char *s, t_list *lst)
 {
 	int		i;
@@ -42,15 +31,6 @@ t_list	*treatin(char *s, t_list *lst)
 	return (lst);
 }
 
-int	ins(char c, int m, int j)
-{
-	if (m % 2 != 0 && c != '\"')
-		return (1);
-	else if (j % 2 != 0 && c != '\'')
-		return (1);
-	else
-		return (0);
-}
 
 int	quote(char *in)
 {
@@ -78,57 +58,14 @@ int	quote(char *in)
 	return (1);
 }
 
-void	free_env(t_env *env)
-{
-	t_env	*tmp;
-
-	while (env)
-	{
-		tmp = (env);
-		(env) = (env)->next;
-		if (env)
-		{
-			free(tmp->name);
-			free(tmp->value);
-		}
-		free(tmp);
-	}
-}
-
-void	free_data(t_data *data)
-{
-	t_data	*tmp;
-
-	while (data)
-	{
-		tmp = data;
-		data = data->next;
-		free(tmp);
-	}
-}
-
-void	free_lst(t_list *lst)
-{
-	t_list	*tmp;
-
-	while (lst)
-	{
-		tmp = lst;
-		lst = lst->next;
-		free(tmp);
-	}
-}
-
-int	pparss(char *input)
+int	distribut(char *input)
 {
 	t_list	*lst;
 	t_data	*data;
 
 	lst = NULL;
-	// input free
 	if (!*input)
 		return (0);
-	// input free
 	if (!quote(input))
 		return (msg_error(lst), 0);
 	lst = treatin(input, lst);
@@ -176,12 +113,7 @@ void	parss(void)
 		if (!input)
 			exit(g_lobal.ex);
 		add_history(input);
-		if (!pparss(input))
+		if (!distribut(input))
 			continue ;
 	}
 }
-// syntax error $cs'\'
-// syntax error $cs'!'
-// '' `` "" in last word
-//`` in word
-//"ls $"

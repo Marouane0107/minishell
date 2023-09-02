@@ -2,7 +2,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 NAME = minishell
 SRCS = main.c linkd_list.c utils.c utils1.c parss.c utils2.c utils3.c env.c \
-	get_next_line_bonus.c get_next_line_utils.c
+	get_next_line_bonus.c get_next_line_utils.c free.c openherd.c utils5.c utils6.c\
+	filldata.c
 OBJS = $(SRCS:.c=.o)
 
 
