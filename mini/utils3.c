@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 23:53:31 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 19:58:13 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,20 +137,22 @@ int openout(t_list *lst)
 {
     int fd;
     int m;
+    char *s;
     m = lst->next->token;
     fd = 1;
+    s = lst->next->content;
     if (m == -3)
     {
-        printf("bash: %s: ambiguous redirect\n", lst->next->content);
-        ft_skip(&lst);
-        return(1);
+        printf("bash: %s: ambiguous redirect\n", s);
+        return(ft_skip(&lst),1);
     }
+    if(!ft_strcmp(s, "\'\'") || !ft_strcmp(s, "\"\""))
+        return(printf("bash: : No such file or directory\n"),-3);
     if(lst->token == 3 && !g_lobal.g)
     {
         fd = open(lst->next->content, O_RDWR | O_CREAT, 0644);
         if(fd == -1)
             return (perror("open"), -3);
-
     }
     else if(lst->token == 4 && !g_lobal.g)
     {
@@ -298,4 +300,49 @@ t_data    *convert_lst(t_list *lst)
 // here_doc: shfa
 // here_doc: gfa
 // here_doc: l
+// minishell$ 
+///////////////////////////////////////////////////////
+// minishell$ > ""
+// bash: : No such file or directory
+// in = 0
+// out = 1
+// minishell$ > "" | ls
+// bash: : No such file or directory
+// in = 0
+// out = -1
+// in = -2
+// out = 1
+// cmd = [ls]
+// minishell$ > '' |  ls
+// bash: : No such file or directory
+// in = 0
+// out = -1
+// in = -2
+// out = 1
+// cmd = [ls]
+// minishell$ "" | ''
+// in = 0
+// out = -1
+// cmd = ['']
+// in = -2
+// out = 1
+// cmd = ['']
+// minishell$ ls ""
+// in = 0
+// out = 1
+// cmd = [ls]
+// cmd = ['']
+// minishell$ ls ''
+// in = 0
+// out = 1
+// cmd = [ls]
+// cmd = ['']
+// minishell$ pwdd
+// in = 0
+// out = 1
+// cmd = [pwdd]
+// minishell$ ls
+// in = 0
+// out = 1
+// cmd = [ls]
 // minishell$ 

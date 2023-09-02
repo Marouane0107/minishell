@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/31 20:04:12 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 19:28:07 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,11 +134,6 @@ t_env *get_environ()
     env = NULL;
     if (!environ || !environ[0])
         return(new_env(&env) ,env);
-    name = get_name(environ[i]);
-    value = get_value(environ[i]);
-    env = ft_lstnew1(name, value);
-    free(name);
-    free(value);
     while(environ[i])
     {
         name = get_name(environ[i]);

@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 23:52:47 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 17:24:42 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,10 +175,7 @@ int ft_word(char *s, t_list **lst)
 { 
 	char *wexp;
 	if(end_struct(lst) == 5)
-		{
-			ofherdoc(s, lst);
-			return(1);
-		}
+			return(ofherdoc(s, lst),1);
 	if(ambigus(s, lst))
 	{
 		wexp = check_expend(s, lst, 11);
@@ -191,10 +188,7 @@ int ft_word(char *s, t_list **lst)
 	wexp = check_expend(s, lst, 1);
 	ex_status(&wexp);
 	if(!(*wexp) && (ft_strchr(s, '\'') || ft_strchr(s, '\"')))
-	{
-		free(wexp);
 		wexp = ft_strdup("''");
-	}
 	if(end_struct(lst) > 1)
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
 	else

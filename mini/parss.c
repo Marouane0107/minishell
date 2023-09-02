@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/01 20:51:12 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/02 19:34:19 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,6 @@ void	free_data(t_data *data)
 	{
 		tmp = data;
 		data = data->next;
-		// if(data)
-		// {
-		// 	ffree(tmp->cmd);
-		// }
 		free(tmp);
 	}
 }
@@ -119,11 +115,6 @@ void	free_lst(t_list *lst)
 	{
 		tmp = lst;
 		lst = lst->next;
-		// if (tmp)
-		// {
-		// 	if (tmp->content && *tmp->content)
-		// 		free(tmp->content);
-		// }
 		free(tmp);
 	}
 }
@@ -183,10 +174,8 @@ void	parss(void)
 		input = readline("minishell$ ");
 		g_lobal.g = 0;
 		if (!input)
-			exit(0);
+			exit(g_lobal.ex);
 		add_history(input);
-		if (ft_strcmp(input, "exit") == 0)
-			exit(0);
 		if (!pparss(input))
 			continue ;
 	}
