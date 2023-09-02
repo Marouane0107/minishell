@@ -6,25 +6,67 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/08/27 03:53:03 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/02 19:08:22 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	cmd_check(t_data *data)
+{
+	if (!data)
+		return ;
+	else if (ft_strcmp(data->cmd[0], "export") == 0)
+		ft_export(data);
+	else if (ft_strcmp(data->cmd[0], "cd") == 0)
+		ft_cd(data);
+	else if (ft_strcmp(data->cmd[0], "echo") == 0)
+		ft_echo(data);
+	else if (ft_strcmp(data->cmd[0], "env") == 0)
+		ft_env(data);
+	else if (ft_strcmp(data->cmd[0], "pwd") == 0)
+		ft_pwd();
+	else if (ft_strcmp(data->cmd[0], "unset") == 0)
+	ft_unset(data);
+			else if (ft_strcmp(data->cmd[0], "exit") == 0)
+		ft_exit(0);
+	else
+		exec_cmd(data);
+}
+
+void	get_cmd(t_data *data)
+{
+	t_data	*tmp;
+
+	tmp = data;
+	while (tmp && tmp->next)
+	{
+		if(!tmp->cmd)
+		{
+			tmp->cmd = tmp->next->cmd;
+		}
+		else
+			return ;
+	}
+}
+
 void	exec_cmd(t_data *data)
 {
 	int		i;
 	char	*path;
+	char	**path_part;
 	char	*path_cmd;
 	char	*cmd_path;
 
 	i = 0;
-	path = getenv("PATH");
-	data->path = ft_split(path, ':');
-	while (data->path[i])
+	if (!data->cmd)
+		return ;
+	path = ft_getenv("PATH");
+	path_part = ft_split(path, ':');
+	get_cmd(data);
+	while (path_part[i])
 	{
-		cmd_path = ft_strjoin(data->path[i], "/");
+		cmd_path = ft_strjoin(path_part[i], "/");
 		path_cmd = ft_strjoin(cmd_path, data->cmd[0]);
 		if (access(path_cmd, X_OK) == -1)
 			free(path_cmd);
@@ -39,89 +81,45 @@ void	exec_cmd(t_data *data)
 	exit(127);
 }
 
-// bad file descriptor error
-
-void	changing_files(t_data *data, int fd[2])
+void	milti_pipe(t_data *data, int fd[2])
 {
-	printf("in = %d\n", data->in);
-	printf("out = %d\n", data->out);
-	if (data->in != 0)
-	{
-		if (data->in > 0)
-		{
-			if (dup2(data->in, 0) == -1)
-				perror("dup2");
-		}
-		if (data->in == -2 || data->in > 0)
-		{
-			if (dup2(fd[1], 0) == -1)
-				perror("dup2");
-			close(fd[0]);
-		}
-		if (data->in > 0)
-			close(data->in);
-		data->in = 0;
-	}
-	if (data->out != 1)
-	{
-		if (data->out > 2)
-		{
-			if (dup2(data->out, 1) == -1)
-				perror("dup2");
-		}
-		if (dup2(fd[0], 1) == -1)
-			perror("dup2");
-		close(fd[1]);
-		if (data->out > 2)
-			close(data->out);
-	}
-}
+	pid_t	pid;
+	t_data	*tmp;
 
-void	ft_fork(t_data *data, pid_t *id, int fd[2])
-{
-	*id = fork();
-	if (*id == -1)
+	tmp = data;
+	while (tmp)
 	{
-		perror("fork");
-		exit(1);
+		pipe(fd);
+		if(pipe(fd) == -1)
+			perror("pipe");
+		pid = fork();
+		if (pid == -1)
+			perror("fork");
+		if (pid == 0)
+			child(tmp, fd);
+		else
+			parent(tmp, fd);
+		tmp = tmp->next;
 	}
-	if (*id == 0)
-	{
-		changing_files(data, fd);
-		exec_cmd(data);
-	}
-	else if (*id > 0)
-	{
-		close(fd[1]);
-		close(fd[0]);
-		waitpid(*id, &status, 0);
-		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-	}
+	ft_close(tmp, fd);
+	while (waitpid(pid, NULL, 0) != -1);
 }
 
 void	ft_exec(t_data *data)
 {
 	pid_t	pid;
-	t_data	*tmp;
 	int		fd[2];
 
-	tmp = data;
 	if (data->cmd && data->next)
-	{
-		while (tmp)
-		{
-			pipe(fd);
-			if(pipe(fd) == -1)
-				perror("pipe");
-			ft_fork(tmp, &pid, fd);
-			tmp = tmp->next;
-			if(tmp)
-				tmp->in = -2;
-		}
-	}
+		milti_pipe(data, fd);
 	else
 	{
-		ft_fork(data, &pid, fd);
+		pid = fork();
+		if (pid == -1)
+			perror("fork");
+		if (pid == 0)
+			cmd_check(data);
+		else
+			waitpid(pid, NULL, 0);
 	}
 }

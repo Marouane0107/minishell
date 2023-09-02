@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 22:29:59 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/02 15:51:04 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,8 @@ t_env *get_environ()
     int i;
     char *name;
     char *value;
-    i = 1;
-    name = get_name(environ[i]);
-    value = get_value(environ[i]);
-    envi = ft_lstnew1(name, value);
+    envi = NULL;
+    i = 0;
     while(environ[i])
     {
         name = get_name(environ[i]);

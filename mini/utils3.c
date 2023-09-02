@@ -6,7 +6,7 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/27 00:53:02 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/28 04:06:41 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int openout(t_list *lst)
 void  allocate(t_data **data, int i)
 {
     t_data *tmp;
-    (*data)->in = 0;
+    (*data)->in = -1;
     (*data)->out = 1; 
     (*data)->cmd = NULL;
     (*data)->next = NULL;
