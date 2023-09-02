@@ -6,56 +6,75 @@
 /*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:41:30 by maouzal           #+#    #+#             */
-/*   Updated: 2023/08/24 00:04:26 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/02 11:43:34 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../mini/minishell.h"
 
 void ft_add_env(t_data *data, char *s)
 {
 	char	*name;
 	char	*value;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
+	data->f = 0;
 	while (s[i] && s[i] != '=')
 		i++;
+	if (s[i] == '=' && s[i - 1] == '+')
+	{
+		i--;
+		data->f = 1;
+	}
 	name = ft_substr(s, 0, i);
-	if (s[i] == '=')
+	if (data->f == 1)
 		i++;
-	value = ft_substr(s, i, ft_strlen(s));
-	ft_lstadd_back(&data->env, ft_lstnew(ft_lstnew_env(name, value)));
-	free(name);
-	free(value);
+	if (s[i] == '=')
+	{
+		i++;
+		value = ft_substr(s, i, ft_strlen(s));
+	}
+	if (!ft_setenv(&data, name, value))
+		return ;
+	else 
+		ft_lstdadd_back1(&data->env, ft_lstnew1(name, value));
+}
+
+void	print_export(t_data *data)
+{
+	t_env	*tmp;
+
+	tmp = data->env;
+	while (tmp)
+	{
+		if (tmp->value)
+			printf("declare -x %s=\"%s\"\n", tmp->name, tmp->value);
+		else
+			printf("declare -x %s\n", tmp->name);
+		tmp = tmp->next;
+	}
 }
 
 void	ft_export(t_data *data)
 {
-	t_env	*tmp;
-	int		i;
+	int	i;
 
 	i = 1;
-	tmp = data->env;
 	if (!data->cmd[1])
 	{
-		while (tmp)
-		{
-			printf("declare -x %s=\"%s\"\n", tmp->name, tmp->value);
-			tmp = tmp->next;
-		}
+		print_export(data);
+		return ;
+	}
+	if ((data->cmd[1][0] >= 97 && data->cmd[1][0] <= 122)
+		|| (data->cmd[1][0] >= 65 && data->cmd[1][0] <= 90))
+	{	
+		while (data->cmd[i])
+			ft_add_env(data, data->cmd[i++]);
 	}
 	else
 	{
-		while (data->cmd[i])
-		{
-			if (ft_strchr(data->cmd[i], '='))
-				ft_add_env(data, data->cmd[i]);
-			else
-				ft_add_env(data, data->cmd[i]);
-			i++;
-		}
+		printf("minishell: export: `%s': not a valid identifier\n", data->cmd[1]);
+		return ;
 	}
 }
