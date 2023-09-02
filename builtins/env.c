@@ -12,17 +12,19 @@
 
 #include "../mini/minishell.h"
 
-void    ft_env(t_data *data)
+void    ft_env()
 {
-    while(data->env)
+    t_env *tmp;
+    tmp = g_lobal.env;
+    while(tmp)
     {
-        if(data->env->value)
+        if(tmp->value)
         {
-            ft_putstr_fd(data->env->name, 1);
+            ft_putstr_fd(tmp->name, 1);
             ft_putstr_fd("=", 1);
-            ft_putstr_fd(data->env->value, 1);
+            ft_putstr_fd(tmp->value, 1);
             ft_putstr_fd("\n", 1);
         }
-        data->env = data->env->next;
+        tmp = tmp->next;
     }
 }

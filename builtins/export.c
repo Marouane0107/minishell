@@ -35,17 +35,17 @@ void ft_add_env(t_data *data, char *s)
 		i++;
 		value = ft_substr(s, i, ft_strlen(s));
 	}
-	if (!ft_setenv(&data, name, value))
+	if (!ft_setenv(name, value))
 		return ;
 	else 
-		ft_lstdadd_back1(&data->env, ft_lstnew1(name, value));
+		ft_lstdadd_back1(&g_lobal.env, ft_lstnew1(name, value));
 }
 
-void	print_export(t_data *data)
+void	print_export()
 {
 	t_env	*tmp;
 
-	tmp = data->env;
+	tmp = g_lobal.env;
 	while (tmp)
 	{
 		if (tmp->value)

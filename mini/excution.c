@@ -23,7 +23,7 @@ void	cmd_check(t_data *data)
 	else if (ft_strcmp(data->cmd[0], "echo") == 0)
 		ft_echo(data);
 	else if (ft_strcmp(data->cmd[0], "env") == 0)
-		ft_env(data);
+		ft_env();
 	else if (ft_strcmp(data->cmd[0], "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(data->cmd[0], "unset") == 0)

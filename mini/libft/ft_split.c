@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static void	ffree(char **p)
+void	ffree(char **p)
 {
 	int	i;
 
@@ -46,6 +46,12 @@ static int	ft_count(char const *s, char c)
 }
 int check_char(char c, char s)
 {
+	if(s < 0)
+	{
+		if(c == s)
+			return(1);
+		return(0);
+	}
 	if(c == s)
 		return (1);
 	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ')

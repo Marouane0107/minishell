@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_env.c                                          :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 15:51:04 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/02 20:27:33 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,21 @@
 #include "minishell.h"
 
 
-t_env *ft_lstdadd_back1(t_env **lst, t_env *new)
+t_env *st_new(char *name, char *value)
 {
-    t_env *tmp;
-    if(!lst || !new)
-        return (0);
-    if(!(*lst))
-        *lst = new;
-    else
+    char cwd[1024];
+    
+    if(ft_strcmp(name, "OLDPWD") == 0)
     {
-        tmp = *lst;
-        while(tmp->next)
-            tmp = tmp->next;
-        tmp->next = new;
+        getcwd(cwd, sizeof(cwd));
+        return(ft_lstnew1(name, cwd));
     }
-    return (new);
-}
-
-t_env *ft_lstnew1(char *name, char *value)
-{
-    t_env *node;
-    node = malloc(sizeof(t_env));
-    if(!node)
-        return (0);
-    if(node)
-    {
-        node->name = name;
-        node->value = value;
-        node->next = NULL;
-    }
-    return (node);
+  else if(ft_strcmp(name, "SHLVL") == 0)
+        return(ft_lstnew1(name, "1"));
+   else if(ft_strcmp(name, "_") == 0)
+        return(ft_lstnew1(name, "/usr/bin/"));
+    else 
+        return(ft_lstnew1(name, value));
 }
 
 char *get_name(char *str)
@@ -86,23 +71,32 @@ char *get_value(char *str)
     value[i] = '\0';
     return (value);
 }
-
+void new_env(t_env **env)
+{
+    ft_lstdadd_back1(env, st_new("OLDPWD", ""));
+    ft_lstdadd_back1(env, st_new("SHLVL", ""));
+    ft_lstdadd_back1(env, st_new("_", ""));
+}
 t_env *get_environ()
 {
+    t_env *env;
     extern char	**environ;
-    t_env *envi;
     int i;
     char *name;
     char *value;
-    envi = NULL;
     i = 0;
+    env = NULL;
+    if (!environ || !environ[0])
+        return(new_env(&env) ,env);
     while(environ[i])
     {
         name = get_name(environ[i]);
         value = get_value(environ[i]);
-        ft_lstdadd_back1(&envi, ft_lstnew1(name, value));
+        ft_lstdadd_back1(&env, st_new(name, value));
+        free(name);
+        free(value);
         i++;
     }
-    return (envi);
+    return (env);
 }
 //shlvl=1

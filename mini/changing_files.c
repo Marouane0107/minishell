@@ -45,7 +45,7 @@ void child(t_data *data, int fd[2])
 		if (dup2(data->in, 0) == -1)
 			perror("dup2");
 	}
-	if (data->out == 0)
+	if (data->out == -1)
 	{
 		if (dup2(fd[1], 1) == -1)
 			perror("dup2");
@@ -54,7 +54,7 @@ void child(t_data *data, int fd[2])
 		cmd_check(data);
 		exit(0);
 	}
-	else if (data->out != 0)
+	else if (data->out != -1)
 	{
 		if (dup2(1, fd[1]) == -1)
 			perror("dup2");
