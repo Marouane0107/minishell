@@ -3,14 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:41:30 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/02 11:43:34 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/03 20:44:23 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini/minishell.h"
+
+int	name_check(char	*name)
+{
+	int	i;
+
+	i = 0;
+	while (name[i])
+	{
+		if ((name[i] >= 97 && name[i] <= 122)
+			|| (name[i] >= 65 && name[i] <= 90)
+			|| (name[i] >= 48 && name[i] <= 57)
+			|| name[i] == '_' || name[i] == 92)
+			i++;
+		else
+		{
+			printf("minishell: export: `%s': not a valid identifier\n", name);
+			return (1) ;
+		}
+	}
+	return (0);
+}
 
 void ft_add_env(t_data *data, char *s)
 {
@@ -19,6 +40,8 @@ void ft_add_env(t_data *data, char *s)
 	int		i;
 
 	i = 0;
+	name = NULL;
+	value = NULL;
 	data->f = 0;
 	while (s[i] && s[i] != '=')
 		i++;
@@ -28,6 +51,8 @@ void ft_add_env(t_data *data, char *s)
 		data->f = 1;
 	}
 	name = ft_substr(s, 0, i);
+	if (name_check(name))
+		return ;
 	if (data->f == 1)
 		i++;
 	if (s[i] == '=')
@@ -35,9 +60,9 @@ void ft_add_env(t_data *data, char *s)
 		i++;
 		value = ft_substr(s, i, ft_strlen(s));
 	}
-	if (!ft_setenv(name, value))
+	if (!ft_setenv(data, name, value))
 		return ;
-	else 
+	else
 		ft_lstdadd_back1(&g_lobal.env, ft_lstnew1(name, value));
 }
 
@@ -46,6 +71,7 @@ void	print_export()
 	t_env	*tmp;
 
 	tmp = g_lobal.env;
+	
 	while (tmp)
 	{
 		if (tmp->value)
@@ -56,25 +82,20 @@ void	print_export()
 	}
 }
 
+
 void	ft_export(t_data *data)
 {
 	int	i;
+	t_env	*tmp;
+	(void)tmp;
 
 	i = 1;
+	tmp = g_lobal.env;
 	if (!data->cmd[1])
 	{
-		print_export(data);
+		print_export();
 		return ;
 	}
-	if ((data->cmd[1][0] >= 97 && data->cmd[1][0] <= 122)
-		|| (data->cmd[1][0] >= 65 && data->cmd[1][0] <= 90))
-	{	
-		while (data->cmd[i])
-			ft_add_env(data, data->cmd[i++]);
-	}
-	else
-	{
-		printf("minishell: export: `%s': not a valid identifier\n", data->cmd[1]);
-		return ;
-	}
+	while (data->cmd[i])
+		ft_add_env(data, data->cmd[i++]);
 }

@@ -3,16 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:16 by maouzal           #+#    #+#             */
-/*   Updated: 2023/08/26 02:43:35 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/03 17:46:32 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini/minishell.h"
 
-void    ft_exit(int status)
+void    ft_exit(t_data *data)
 {
-    exit(status);
+	if (data->cmd[1] && !data->cmd[2])
+		exit(ft_atoi(data->cmd[1]));
+	if (data->cmd[1] && data->cmd[2])
+	{
+		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 1);
+		return;
+	}
+	exit(g_lobal.ex);
 }
