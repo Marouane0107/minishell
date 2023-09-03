@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   excution.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/02 19:08:22 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/03 19:50:04 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	cmd_check(t_data *data)
+int	cmd_check(t_data *data)
 {
-	if (!data)
-		return ;
+	
+	if (!data || !data->cmd)
+		return (-1);
 	else if (ft_strcmp(data->cmd[0], "export") == 0)
 		ft_export(data);
 	else if (ft_strcmp(data->cmd[0], "cd") == 0)
@@ -27,11 +28,13 @@ void	cmd_check(t_data *data)
 	else if (ft_strcmp(data->cmd[0], "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(data->cmd[0], "unset") == 0)
-	ft_unset(data);
-			else if (ft_strcmp(data->cmd[0], "exit") == 0)
-		ft_exit(0);
+		ft_unset(data);
+	else if (ft_strcmp(data->cmd[0], "exit") == 0)
+		ft_exit(data);
 	else
-		exec_cmd(data);
+		return (1);
+	return (0);
+		
 }
 
 void	get_cmd(t_data *data)
@@ -62,9 +65,14 @@ void	exec_cmd(t_data *data)
 	if (!data->cmd)
 		return ;
 	path = ft_getenv("PATH");
+	if (!path)
+	{
+		printf("minishell: %s: No such file or directory\n", data->cmd[0]);
+		exit(127);
+	}
 	path_part = ft_split(path, ':');
 	get_cmd(data);
-	while (path_part[i])
+	while (path_part && path_part[i])
 	{
 		cmd_path = ft_strjoin(path_part[i], "/");
 		path_cmd = ft_strjoin(cmd_path, data->cmd[0]);
@@ -98,10 +106,11 @@ void	milti_pipe(t_data *data, int fd[2])
 		if (pid == 0)
 			child(tmp, fd);
 		else
-			parent(tmp, fd);
+			parent(fd);
 		tmp = tmp->next;
 	}
-	ft_close(tmp, fd);
+	ft_close_pipe(fd);
+	ft_close_file(tmp);
 	while (waitpid(pid, NULL, 0) != -1);
 }
 
@@ -111,15 +120,28 @@ void	ft_exec(t_data *data)
 	int		fd[2];
 
 	if (data->cmd && data->next)
-		milti_pipe(data, fd);
+		milti_pipe(data ,fd);
 	else
 	{
-		pid = fork();
-		if (pid == -1)
-			perror("fork");
-		if (pid == 0)
-			cmd_check(data);
+		if(!cmd_check(data))
+			return ;
 		else
-			waitpid(pid, NULL, 0);
+		{
+			pid = fork();
+			if (pid == -1)
+				perror("fork");
+			if (pid == 0)
+			{
+				out_in_file(data);
+				exec_cmd(data);
+				exit(0);
+			}
+			else
+			{
+				ft_close_file(data);
+				waitpid(pid, NULL, 0);
+			}
+		}
 	}
 }
+

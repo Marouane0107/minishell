@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parss.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:42:14 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/03 19:08:56 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ t_data	*distribut(char *input)
 		return (free_lst(lst), NULL);
 	data = convert_lst(lst);
 	free_lst(lst);
-	// free_data(data);
 	lst = NULL;
 	// while (lst)
 	// {
@@ -99,11 +98,11 @@ void	sigint_handler(int sig)
 void	parss(void)
 {
 	char	*input;
+
 	int 		x;
 	int 		y;
 	t_data *data;
-
-
+	data = NULL;
 	g_lobal.env = get_environ();
 	input = NULL;
 	x = dup(0);
@@ -125,7 +124,11 @@ void	parss(void)
 		data = distribut(input);
 		if (data)
 			ft_exec(data);
-		data = NULL;
+		if(data)
+		{
+			free_data(data);
+			data = NULL;
+		}
 		if (!data)
 			continue ;
 	}

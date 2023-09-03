@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 19:07:10 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/03 18:57:21 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ extern t_global		g_lobal;
 typedef struct s_data
 {
 	int				status;
-	t_env			*env;
 	int 			f;
 	char			**cmd;
 	int				in;
@@ -100,22 +99,24 @@ char				*ft_str(char s);
 void				add_node(t_list **head, char *content, int token);
 void				remove_node(t_data *data, char *name);
 void				ft_free_linkdlist(t_data *data, t_list *lst);
-void				ft_unset(t_data *cmd);
-void					ft_env();
-void					ft_pwd(void);
+void	ft_unset(t_data *cmd);
+void	ft_env();
+void	ft_pwd(void);
 void	ft_cd(t_data *data);
-void    ft_exit(int status);
+void    ft_exit(t_data *data);
 void	ft_echo(t_data *data);
 void	ft_export(t_data *data);
 void	ft_lstadd_back2(t_data **lst, t_data *new);
-void	cmd_check(t_data *data);
 void	ft_exec(t_data *data);
 void	exec_cmd(t_data *data);
 void	milti_pipe(t_data *tmp, int fd[2]);
-void    parent(t_data *data, int fd[2]);
+void	out_in_file(t_data *data);
+void    parent(int fd[2]);
 void	child(t_data *data, int fd[2]);
-void	ft_close(t_data *data, int fd[2]);
-int		ft_setenv(char *s, char *value);
+void	ft_close_file(t_data *data);
+void	ft_close_pipe(int fd[2]);
+int		ft_setenv(t_data *data, char *s, char *value);
+int		cmd_check(t_data *data);
 char				*searsh_env(char *c, int j);
 int					get_exp(char *s, int j, char *q, int m);
 int 				check_single(char *s,int j);

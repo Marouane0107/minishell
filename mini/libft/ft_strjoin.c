@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 03:01:25 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/31 20:06:57 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/08/29 18:34:11 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char  *s1, char  *s2)
 {
 	char	*p;
 	int		i;
@@ -28,5 +28,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	while (*s2)
 		p[i++] = *s2++;
 	p[i] = '\0';
+	ft_lstadd(&g_lobal.hold, lst_new(0, s1, s2));
+	ft_lstadd(&g_lobal.hold, lst_new(0, p, 0));
 	return (p);
 }

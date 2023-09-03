@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:38:43 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/03 18:06:43 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int ft_word(char *s, t_list **lst)
 	wexp = check_expend(s, lst, 1);
 	ex_status(&wexp);
 	if(!(*wexp) && (ft_strchr(s, '\'') || ft_strchr(s, '\"')))
-		wexp = ft_strdup("''");
+		wexp = ft_strdup("");
 	if(end_struct(lst) > 1)
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
 	else
