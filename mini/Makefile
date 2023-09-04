@@ -1,4 +1,4 @@
-CC = gcc
+CC = clang
 
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 
@@ -6,7 +6,7 @@ NAME = minishell
 
 SRCS = main.c linkd_list.c utils.c utils1.c parss.c utils2.c utils3.c ../builtins/cd.c ../builtins/env.c \
 		../builtins/echo.c ../builtins/exit.c ../builtins/pwd.c ../builtins/unset.c ../builtins/export.c excution.c \
-		changing_files.c get_env.c filldata.c  openherd.c utils5.c utils6.c free.c
+		changing_files.c get_env.c filldata.c  openherd.c utils5.c utils6.c free.c excution_utils.c 
 
 OBJS = $(SRCS:.c=.o)
 

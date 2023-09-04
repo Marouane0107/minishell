@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 00:25:08 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/03 19:07:55 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/04 12:51:14 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,11 @@ void child(t_data *data, int fd[2])
 	}
 	else if (data->out != -1)
 	{
+		if (data->in > 0)
+		{
+			if (dup2(0, data->in) == -1)
+				perror("dup2");
+		}
 		if (dup2(1, fd[1]) == -1)
 			perror("dup2");
 		ft_close_pipe(fd);

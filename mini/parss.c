@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/03 19:08:56 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/04 18:04:27 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ void	sigint_handler(int sig)
 void	parss(void)
 {
 	char	*input;
-
 	int 		x;
 	int 		y;
+
 	t_data *data;
 	data = NULL;
 	g_lobal.env = get_environ();
@@ -133,13 +133,12 @@ void	parss(void)
 			continue ;
 	}
 }
+
+
 // a="ls -l"
 //export a=ls | export a+=l == a=l ??
 //echo ad >a
-//export jjj+j
-// export a= a
-//echo
-//echo ""
-//cat << l
-//<< l
 //exit 2
+//rm -rf ./ pwd
+//bash ./minishel PATH
+//bash -> ./minishell !env

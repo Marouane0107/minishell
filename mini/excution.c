@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/03 19:50:04 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/04 14:37:08 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	cmd_check(t_data *data)
 	else if (ft_strcmp(data->cmd[0], "echo") == 0)
 		ft_echo(data);
 	else if (ft_strcmp(data->cmd[0], "env") == 0)
-		ft_env();
+		ft_env(data);
 	else if (ft_strcmp(data->cmd[0], "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(data->cmd[0], "unset") == 0)
@@ -35,58 +35,6 @@ int	cmd_check(t_data *data)
 		return (1);
 	return (0);
 		
-}
-
-void	get_cmd(t_data *data)
-{
-	t_data	*tmp;
-
-	tmp = data;
-	while (tmp && tmp->next)
-	{
-		if(!tmp->cmd)
-		{
-			tmp->cmd = tmp->next->cmd;
-		}
-		else
-			return ;
-	}
-}
-
-void	exec_cmd(t_data *data)
-{
-	int		i;
-	char	*path;
-	char	**path_part;
-	char	*path_cmd;
-	char	*cmd_path;
-
-	i = 0;
-	if (!data->cmd)
-		return ;
-	path = ft_getenv("PATH");
-	if (!path)
-	{
-		printf("minishell: %s: No such file or directory\n", data->cmd[0]);
-		exit(127);
-	}
-	path_part = ft_split(path, ':');
-	get_cmd(data);
-	while (path_part && path_part[i])
-	{
-		cmd_path = ft_strjoin(path_part[i], "/");
-		path_cmd = ft_strjoin(cmd_path, data->cmd[0]);
-		if (access(path_cmd, X_OK) == -1)
-			free(path_cmd);
-		else if (execve(path_cmd, data->cmd, NULL) == -1)
-		{
-			printf("minishell: %s: command not found\n", data->cmd[0]);
-			exit(127);
-		}
-		i++;
-	}
-	printf("minishell: %s: command not found\n", data->cmd[0]);
-	exit(127);
 }
 
 void	milti_pipe(t_data *data, int fd[2])
@@ -123,6 +71,7 @@ void	ft_exec(t_data *data)
 		milti_pipe(data ,fd);
 	else
 	{
+
 		if(!cmd_check(data))
 			return ;
 		else

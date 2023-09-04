@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/03 18:57:21 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/04 21:00:33 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,15 @@ typedef struct s_grbg
 	char 			**l;
 	struct s_grbg	*next;
 }					t_grbg;
-typedef struct s_global
+typedef struct	s_global
 {
-	int				g;
-	t_env			*env;
-	int				ex;
-	t_grbg			*hold;
-}					t_global;
+	int		g;
+	int		i;
+	int		j;
+	t_env	*env;
+	int		ex;
+	t_grbg	*hold;
+}		t_global;
 
 extern t_global		g_lobal;
 
@@ -100,7 +102,7 @@ void				add_node(t_list **head, char *content, int token);
 void				remove_node(t_data *data, char *name);
 void				ft_free_linkdlist(t_data *data, t_list *lst);
 void	ft_unset(t_data *cmd);
-void	ft_env();
+void	ft_env(t_data *data);
 void	ft_pwd(void);
 void	ft_cd(t_data *data);
 void    ft_exit(t_data *data);

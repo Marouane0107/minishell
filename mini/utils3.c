@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/04 11:16:20 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/04 22:38:31 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void  allocate(t_data **data, int i)
 t_data    *convert_lst(t_list *lst)
 {
     char **s;
-    t_data *tmp;
+//    t_data *tmp;
     t_data *data;
     (void)data;
     data = malloc(sizeof(t_data));
@@ -64,20 +64,20 @@ t_data    *convert_lst(t_list *lst)
     s = open_here(lst);
     fill(&data, lst, s);
     ffree(s);
-    int i = 0;
-    tmp = data;
-    while(tmp)
-    {
-         i = 0;
-        printf("in = %d\n", tmp->in); 
-        printf("out = %d\n", tmp->out); 
-        while(tmp->cmd && tmp->cmd[i])
-        {
-            printf("cmd = [%s]\n", tmp->cmd[i]);
-            i++;
-        }
-        tmp = tmp->next;
-    }
+    // int i = 0;
+    // tmp = data;
+    // while(tmp)
+    // {
+    //      i = 0;
+    //     printf("in = %d\n", tmp->in); 
+    //     printf("out = %d\n", tmp->out); 
+    //     while(tmp->cmd && tmp->cmd[i])
+    //     {
+    //         printf("cmd = [%s]\n", tmp->cmd[i]);
+    //         i++;
+    //     }
+    //     tmp = tmp->next;
+    // }
     return(data);
 }
 // " '$USER' "

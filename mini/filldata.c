@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filldata.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/04 11:11:33 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/04 13:53:22 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@ int openin(t_list *tmp, char **s, int j)
     fd = 0;
     if(tmp->token == 5 && !g_lobal.g)
     {
-        here = ft_strjoin("/goinfre/otamrani/her", ft_itoa(j));
+        here = ft_strjoin("/tmp/her", ft_itoa(j));
         fd = open(here, O_RDWR | O_CREAT | O_TRUNC, 0644);
         if(fd == -1)
             return (perror("open"), -3);
         ft_putstr_fd(s[j], fd);
+        close(fd);
+        fd = open(here, O_RDONLY);
     }
     else if(!g_lobal.g)
     {
