@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 01:10:02 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/31 12:03:11 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/04 11:13:48 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,12 @@ static int	ft_count(char const *s, char c)
 	int	count;
 
 	i = 0;
-	count = 1;
+	count = 0;
+	if(s && !*s)
+		return(1);
 	while (s[i])
 	{
-		if (check_char(s[0], c) && i == 0)
+		if (!check_char(s[0], c) && i == 0)
 			count++;
 		if (check_char(s[i], c) && !check_char(s[i + 1], c) && s[i + 1] != '\0')
 		{
@@ -97,7 +99,13 @@ char	**ft_split(char const *s, char c)
 	p = malloc(sizeof(char *) * (i + 1));
 	if (!p)
 		return (0);
-	p = ft_len(s, c, p);
+	if(s && !*s)
+	{
+		p[0] = ft_strdup("");
+		p[1] = 0;
+	}
+	else
+		p = ft_len(s, c, p);
 	ft_lstadd(&g_lobal.hold, lst_new(p,0,0));
 	return (p);
 }
