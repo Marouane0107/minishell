@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 23:19:40 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/20 16:07:05 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/08/24 00:10:13 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 	i = 0;
 	if (!s1 && !s2)
+		return (0);
+	if(!s1 && !*s2 || !s2 && !*s1)
 		return (0);
 	if(!s2 && s1)
 		return (1);

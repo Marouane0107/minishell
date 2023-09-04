@@ -6,11 +6,11 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 15:36:57 by otamrani          #+#    #+#             */
-/*   Updated: 2022/11/12 17:30:44 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/04 17:32:52 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../minishell.h"
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -36,5 +36,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		len--;
 	}
 	p[j] = 0;
+	ft_lstadd(&g_lobal.hold, lst_new(0, p, (char *)s));
 	return (p);
 }

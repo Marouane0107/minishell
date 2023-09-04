@@ -3,46 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   parss.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <maouzal@student.42.fr>            +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/22 23:35:28 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/05 00:53:27 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_list *treatin(char *s,t_env *env)
+
+t_list	*treatin(char *s, t_list *lst)
 {
 	int		i;
-	t_list *lst;
-	// int		j;
 	char	**p;
+
 	i = 0;
-	lst = NULL;
 	p = ft_split(s, ' ');
-	// j = 0;
-	i = 0;
 	while (p[i])
 	{
-		if (!detach_separted(p[i], env, &lst))
+		if (!detach_separted(p[i], &lst))
 			return (0);
 		i++;
 	}
 	if (end_struct(&lst) > 0)
-		return (ft_putstr_fd("minishell$ syntax errorF\n", 2), NULL);
+		return (msg_error(lst), NULL);
 	return (lst);
 }
-int	ins(char c, int m, int j)
-{
-	if (m % 2 != 0 && c != '\"')
-		return (1);
-	else if (j % 2 != 0 && c != '\'')
-		return (1);
-	else
-		return (0);
-}
-char	*quote(char *in)
+
+
+int	quote(char *in)
 {
 	int	i;
 	int	m;
@@ -64,78 +54,86 @@ char	*quote(char *in)
 		i++;
 	}
 	if (j % 2 != 0 || m % 2 != 0)
-		return (write(2, "minishell$ syntax error Q\n", 25), NULL);
-	return (in);
-}
-int	fil_env(t_list **lst)
-{
-	extern char	**environ;
-	int			i;
-
-	i = 0;
-	*lst = malloc(sizeof(t_list));
-	while (environ[i])
-		i++;
-	(*lst)->env = malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (environ[i])
-	{
-		(*lst)->env[i] = ft_strdup(environ[i]);
-		i++;
-	}
-	(*lst)->env[i] = NULL;
-	(*lst)->content = NULL;
-	(*lst)->next = NULL;
+		return (0);
 	return (1);
 }
-void ft_free_linkdlist(t_data *data, t_list *lst)
-{
-	t_list *tmp;
-	t_data *tmp2;
-	tmp = lst;
-	tmp2 = data;
-	while (tmp)
-	{
-		lst = lst->next;
-		free(tmp->content);
-		tmp->content = NULL;
-		free(tmp);
-		tmp = lst;
-	}
-	while (tmp2)
-	{
-		data = data->next;
-		free(tmp2->cmd);
-		tmp2->cmd = NULL;
-		free(tmp2);
-		tmp2 = data;
-	}
-}
 
-t_data	*pparss(char *input, t_env *env)
+t_data	*distribut(char *input)
 {
-	t_data *data;
-	// int	i;
-	t_list *tmp;
-	// i = 0;
-	if (!input || !*input)
+	t_list	*lst;
+	t_data	*data;
+
+	data = NULL;
+	lst = NULL;
+	if (!*input)
 		return (0);
 	if (!quote(input))
-		return (0);
-	tmp = treatin(input, env);
-	if (!tmp)
-		return (0);
-	data = convert_lst(tmp);
-	// while (tmp)
-	// {
-	// 	printf("%s\n", (tmp)->content);
-	// 	printf("%d\n", (tmp)->token);
-	// 	tmp = (tmp)->next;
-	// }
-	return(data);
+		return (msg_error(lst), NULL);
+	lst = treatin(input, lst);
+	if (!lst)
+		return (free_lst(lst), NULL);
+	data = convert_lst(lst);
+	free_lst(lst);
+	lst = NULL;
+	return (data);
 }
-// syntax error $cs'\'
-// syntax error $cs'!'
-// '' `` "" in last word
-//`` in word
-//"ls $"
+
+void	sigint_handler(int sig)
+{
+	(void)sig;
+	g_lobal.ex = 130;
+	if (!g_lobal.g)
+		ft_putstr_fd("\n", 1);
+	rl_replace_line("", 0);	
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void	parss(void)
+{
+	char	*input;
+
+	int 		x;
+	int 		y;
+	t_data *data;
+	data = NULL;
+	g_lobal.env = get_environ();
+	input = NULL;
+	x = dup(0);
+	y = dup(1);
+	while (1)
+	{
+		if (input)
+			free(input);
+		dup2(x, 0);
+		dup2(y, 1);
+		g_lobal.ex = 0;
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
+		input = readline("minishell$ ");
+		g_lobal.g = 0;
+		if (!input)
+			exit(g_lobal.ex);
+		add_history(input);
+		data = distribut(input);
+		if (data)
+			ft_exec(data);
+		if(data)
+		{
+			free_data(data);
+			data = NULL;
+		}
+		if (!data)
+			continue ;
+	}
+}
+// a="ls -l"
+//export a=ls | export a+=l == a=l ??
+//echo ad >a
+//export jjj+j
+// export a= a
+//echo
+//echo ""
+//cat << l
+//<< l
+//exit 2
