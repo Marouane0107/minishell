@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/04 14:37:08 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/05 16:16:59 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ void	milti_pipe(t_data *data, int fd[2])
 	}
 	ft_close_pipe(fd);
 	ft_close_file(tmp);
-	while (waitpid(pid, NULL, 0) != -1);
+	while (waitpid(pid, NULL, 0) > 0);
+	wait(NULL);
 }
 
 void	ft_exec(t_data *data)
@@ -87,10 +88,9 @@ void	ft_exec(t_data *data)
 			}
 			else
 			{
-				ft_close_file(data);
 				waitpid(pid, NULL, 0);
+				ft_close_file(data);
 			}
 		}
 	}
 }
-
