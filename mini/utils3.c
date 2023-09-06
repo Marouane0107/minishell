@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/04 22:38:31 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/05 13:17:12 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,30 @@ int	ins(char c, int m, int j)
 	else
 		return (0);
 }
-
-void  allocate(t_data **data, int i)
+int noption(t_list **lst)
 {
-    t_data *tmp;
-    (*data)->in = 0;
-    (*data)->out = 1; 
-    (*data)->cmd = NULL;
-    (*data)->next = NULL;
-    tmp = *data;
-    while(i - 1 > 0)
+
+    int i;
+    i = 0;
+    if((*lst) && (*lst)->token == 1)
+        (*lst) = (*lst)->next;
+    while((*lst))
     {
-        ft_lstadd_back2(&tmp, ft_lstnew2(NULL, -1, 1));
-        tmp = tmp->next;
+        if((*lst)->token == 1)
+            return(i);
+        (*lst) = (*lst)->next;
+        i++;
+    }
+    return(i);
+}
+void  allocate(t_data **data, int i,t_list *tmp1)
+{
+    int j;
+    j = 0;
+    while(i > 0)
+    {
+        j = noption(&tmp1);
+        ft_lstadd_back2(data, ft_lstnew2(0, 1, j + 1));
         i--;
     }
 }
@@ -54,30 +65,30 @@ void  allocate(t_data **data, int i)
 t_data    *convert_lst(t_list *lst)
 {
     char **s;
-//    t_data *tmp;
+    t_list *tm;
+    t_data *tmp;
     t_data *data;
     (void)data;
-    data = malloc(sizeof(t_data));
-    if(!data)
-        return (0);
-    allocate(&data, count_x(lst, 1) + 1);
+    data = NULL;
+    tm = lst;
+    allocate(&data, count_x(lst, 1), tm);
     s = open_here(lst);
     fill(&data, lst, s);
     ffree(s);
-    // int i = 0;
-    // tmp = data;
-    // while(tmp)
-    // {
-    //      i = 0;
-    //     printf("in = %d\n", tmp->in); 
-    //     printf("out = %d\n", tmp->out); 
-    //     while(tmp->cmd && tmp->cmd[i])
-    //     {
-    //         printf("cmd = [%s]\n", tmp->cmd[i]);
-    //         i++;
-    //     }
-    //     tmp = tmp->next;
-    // }
+    int i = 0;
+    tmp = data;
+    while(tmp)
+    {
+         i = 0;
+        printf("in = %d\n", tmp->in); 
+        printf("out = %d\n", tmp->out);
+        while(tmp->cmd && tmp->cmd[i])
+        {
+            printf("cmd = [%s]\n", tmp->cmd[i]);
+            i++;
+        }
+        tmp = tmp->next;
+    }
     return(data);
 }
 // " '$USER' "

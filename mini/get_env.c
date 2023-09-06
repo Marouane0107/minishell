@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 17:34:51 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:27:33 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/05 13:48:33 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,14 @@
 t_env *st_new(char *name, char *value)
 {
     char cwd[1024];
-    
-    if(ft_strcmp(name, "OLDPWD") == 0)
+    if(ft_strcmp(name, "PWD") == 0)
     {
         getcwd(cwd, sizeof(cwd));
         return(ft_lstnew1(name, cwd));
+    }
+    if(ft_strcmp(name, "OLDPWD") == 0)
+    {
+        return(ft_lstnew1(name, 0));
     }
   else if(ft_strcmp(name, "SHLVL") == 0)
         return(ft_lstnew1(name, "1"));
@@ -74,6 +77,7 @@ char *get_value(char *str)
 void new_env(t_env **env)
 {
     ft_lstdadd_back1(env, st_new("OLDPWD", ""));
+    ft_lstdadd_back1(env, st_new("PWD", ""));
     ft_lstdadd_back1(env, st_new("SHLVL", ""));
     ft_lstdadd_back1(env, st_new("_", ""));
 }

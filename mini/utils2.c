@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/03 18:06:43 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/06 19:11:11 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,8 @@ void ex_status(char **s)
 
 int ambigus(char *s,t_list **lst)
 {
+	if(!ft_strcmp(s, "$"))
+			return(0);
 	if(ft_strchr(s, '\'') || ft_strchr(s, '\"'))
 			return(0);
 	if(end_struct(lst) == 3 || end_struct(lst) == 4)
@@ -103,8 +105,6 @@ int ft_word(char *s, t_list **lst)
 	}
 	wexp = check_expend(s, lst, 1);
 	ex_status(&wexp);
-	if(!(*wexp) && (ft_strchr(s, '\'') || ft_strchr(s, '\"')))
-		wexp = ft_strdup("");
 	if(end_struct(lst) > 1)
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
 	else

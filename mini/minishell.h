@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/04 21:00:33 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/05 12:53:08 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_grbg
 }					t_grbg;
 typedef struct	s_global
 {
+	int n;
 	int		g;
 	int		i;
 	int		j;
@@ -127,7 +128,7 @@ char 				**open_here(t_list *lst);
 char				*stock(char *av, t_list *lst);
 int 				count_x(t_list *lst, int j);
 void  				fill(t_data **data, t_list *lst, char **s);
-void  				add_cmd(char  **cmd, t_list *lst, t_data **tmp);
+void  				add_cmd(t_list *lst, t_data **tmp);
 void 				handle_tokens(t_list **lst, t_data **data, char **s, int j);
 void 				msg_error(t_list *lst);
 int					ins(char c, int m, int j);
@@ -144,7 +145,7 @@ void				sigint_handler(int sig);
 int					get_exp(char *s, int j, char *q, int m);
 t_env				*get_environ(void);
 char				*check_expend(char *s, t_list **lst, int j);
-t_data				*ft_lstnew2(char **s, int in, int out);
+t_data				*ft_lstnew2(int in, int out, int i);
 void				ft_lstadd_back2(t_data **lst, t_data *new);
 int					ft_word(char *s, t_list **lst);
 int					detach_separted(char *str, t_list **lst);

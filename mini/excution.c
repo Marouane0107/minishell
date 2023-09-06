@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excution.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/05 16:16:59 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/07 00:18:16 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,17 @@ int	cmd_check(t_data *data)
 	return (0);
 		
 }
-
+void sigint(int i)
+{
+	(void)i;
+	printf("gfdsgfsdhyrenjthtey\n");
+	signal(SIGINT, SIG_DFL);
+	g_lobal.ex = 130;
+}
 void	milti_pipe(t_data *data, int fd[2])
 {
 	pid_t	pid;
 	t_data	*tmp;
-
 	tmp = data;
 	while (tmp)
 	{
@@ -52,7 +57,10 @@ void	milti_pipe(t_data *data, int fd[2])
 		if (pid == -1)
 			perror("fork");
 		if (pid == 0)
+		{
+			signal(SIGINT, sigint);
 			child(tmp, fd);
+		}
 		else
 			parent(fd);
 		tmp = tmp->next;
@@ -67,30 +75,29 @@ void	ft_exec(t_data *data)
 {
 	pid_t	pid;
 	int		fd[2];
-
+	g_lobal.ex = 0;
+	signal(SIGINT, sigint_handler);
 	if (data->cmd && data->next)
 		milti_pipe(data ,fd);
 	else
 	{
-
-		if(!cmd_check(data))
-			return ;
+		
+		pid = fork();
+		if (pid == -1)
+			perror("fork");
+		if (pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+			out_in_file(data);
+			if(cmd_check(data) > 0)
+				exec_cmd(data);
+			exit(0);
+		}
 		else
 		{
-			pid = fork();
-			if (pid == -1)
-				perror("fork");
-			if (pid == 0)
-			{
-				out_in_file(data);
-				exec_cmd(data);
-				exit(0);
-			}
-			else
-			{
-				waitpid(pid, NULL, 0);
-				ft_close_file(data);
-			}
+			waitpid(pid, NULL, 0);
+			ft_close_file(data);
 		}
+		
 	}
 }

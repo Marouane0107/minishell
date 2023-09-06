@@ -1,4 +1,4 @@
-CC = cc 
+CC = gcc 
 CREAT = ar -rc
 # CFLAGS = -Wall -Werror -Wextra
 RM = rm -f

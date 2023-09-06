@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   excution_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 11:40:02 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/04 20:35:23 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/07 00:05:11 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,29 @@ void	get_cmd(t_data *data)
 	}
 }
 
-void	shlvl(t_data *data, char *s)
+// void	shlvl(t_data *data, char *s)
+// {
+// 	if (ft_strcmp(s, "./minishell") == 0)
+// 	{
+// 		g_lobal.i++;
+// 		data->cmd[0] = ft_strdup("export");
+// 		data->cmd[1] = ft_strjoin("SHLVL=", ft_itoa(g_lobal.i));
+// 		ft_export(data);
+// 		data->cmd[0] = ft_strdup("./minishell");
+// 		free(data->cmd[1]);
+// 		printf("im here\n");
+// 	}	
+// }
+void child_sigint(int sigin)
 {
-	if (ft_strcmp(s, "./minishell") == 0)
-	{
-		g_lobal.i++;
-		data->cmd[0] = ft_strdup("export");
-		data->cmd[1] = ft_strjoin("SHLVL=", ft_itoa(g_lobal.i));
-		ft_export(data);
-		data->cmd[0] = ft_strdup("./minishell");
-		free(data->cmd[1]);
-		printf("im here\n");
-	}	
+	(void)sigin;
+	printf("gfd\n");
+	g_lobal.ex = 130;
 }
-
 void	check_cmd_path(t_data *data)
 {
 	int	i;
-
+	extern char **environ;
 	i = 0;
 	if (!data->cmd)
 		return ;
@@ -53,14 +58,14 @@ void	check_cmd_path(t_data *data)
 	{
 		if (data->cmd[i][0] == '/' || data->cmd[i][0] == '.')
 		{
-			shlvl(data, data->cmd[i]);
+			// shlvl(data, data->cmd[i]);
 			printf("cmd : %s\n", data->cmd[i]);
 			if (access(data->cmd[i], X_OK) == -1)
 			{
 				printf("%s: command not found\n", data->cmd[i]);
 				exit(127);
 			}
-			else if (execve(data->cmd[i], data->cmd, NULL) == -1)
+			else if (execve(data->cmd[i], data->cmd, environ) == -1)
 			{
 				printf("lmlawi\n");
 				printf("%s: command not found\n", data->cmd[i]);
@@ -71,16 +76,18 @@ void	check_cmd_path(t_data *data)
 	}
 }
 
+
 void    exution( t_data *data, char **path_part, int i)
 {
 	char	*cmd_path;
 	char	*path_cmd;
-    
+    extern char **environ;
 	if (!*data->cmd[0])
 	{
 		printf("'': command not found\n");
 		exit(127);
 	}
+	signal(SIGINT, child_sigint);
     while (path_part && path_part[i])
 	{
 		cmd_path = ft_strjoin(path_part[i], "/");
@@ -90,8 +97,9 @@ void    exution( t_data *data, char **path_part, int i)
 			if (path_cmd)
 				free(path_cmd);
 		}
-		else if (execve(path_cmd, data->cmd, NULL) == -1)
+		else if (execve(path_cmd, data->cmd, environ) == -1)
 		{
+			
 			printf("%s: command not found\n", data->cmd[0]);
 			exit(127);
 		}
@@ -106,7 +114,7 @@ void	exec_cmd(t_data *data)
 	char	**path_part;
 
 	i = 0;
-	if (!data->cmd)
+	if (!data->cmd || !*data->cmd)
 		return ;
 	path = ft_getenv("PATH");
 	if (data->cmd[i][0] == '/' || data->cmd[i][0] == '.')

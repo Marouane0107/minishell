@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filldata.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/04 13:53:22 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/06 23:41:42 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int openin(t_list *tmp, char **s, int j)
     fd = 0;
     if(tmp->token == 5 && !g_lobal.g)
     {
-        here = ft_strjoin("/tmp/her", ft_itoa(j));
+        here = ft_strjoin("/tmp/her1", ft_itoa(j));
         fd = open(here, O_RDWR | O_CREAT | O_TRUNC, 0644);
         if(fd == -1)
             return (perror("open"), -3);
@@ -49,11 +49,9 @@ int openout(t_list *lst)
         printf("bash: %s: ambiguous redirect\n", s);
         return(ft_skip(&lst),1);
     }
-    if(!ft_strcmp(s, "\'\'") || !ft_strcmp(s, "\"\""))
-        return(printf("bash: : No such file or directory\n"),-3);
     if(lst->token == 3 && !g_lobal.g)
     {
-        fd = open(lst->next->content, O_RDWR | O_CREAT, 0644);
+        fd = open(lst->next->content, O_RDWR | O_CREAT | O_TRUNC, 0644);
         if(fd == -1)
             return (perror("open"), -3);
     }
@@ -91,34 +89,29 @@ void handle_tokens(t_list **lst, t_data **data, char **s, int j)
    
 }
 
-void  add_cmd(char  **cmd, t_list *lst, t_data **tmp)
+void  add_cmd(t_list *lst, t_data **tmp)
 {
     
-    if(lst->token == 0)
+    if(lst && lst->token == 1)
+        g_lobal.n = 0;
+    else if(lst->token == 0 && (*tmp) && (*tmp)->cmd)
     {
-        *cmd = ft_strjoin(*cmd, ft_str(-122));
-        *cmd = ft_strjoin(*cmd, (lst->content));
-    }
-    if(*cmd && (lst->next == NULL || lst->token == 1))
-    {
-        (*tmp)->cmd = ft_split(*cmd, -122);
-        free(*cmd);
-        *cmd = NULL;
+        (*tmp)->cmd[g_lobal.n] = lst->content;
+        g_lobal.n++;
     }
 }
 
 void  fill(t_data **data, t_list *lst, char **s)
 {
     t_data *tmp;
-    char  *cmd;
     int j;
     j = 0;
-    cmd = NULL;
     tmp = *data;
+    g_lobal.n = 0;
     while(lst)
     {
         if(lst->token == 0 || !lst->next || lst->token == 1)
-            add_cmd(&cmd, lst, &tmp);
+            add_cmd(lst, &tmp);
         if(lst->token == 1)
         {
             if(tmp->out == 1)
