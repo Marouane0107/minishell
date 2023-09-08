@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/07 00:18:16 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:28:12 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,8 @@ int	cmd_check(t_data *data)
 	return (0);
 		
 }
-void sigint(int i)
-{
-	(void)i;
-	printf("gfdsgfsdhyrenjthtey\n");
-	signal(SIGINT, SIG_DFL);
-	g_lobal.ex = 130;
-}
-void	milti_pipe(t_data *data, int fd[2])
+
+int	milti_pipe(t_data *data, int fd[2])
 {
 	pid_t	pid;
 	t_data	*tmp;
@@ -58,7 +52,8 @@ void	milti_pipe(t_data *data, int fd[2])
 			perror("fork");
 		if (pid == 0)
 		{
-			signal(SIGINT, sigint);
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 			child(tmp, fd);
 		}
 		else
@@ -67,18 +62,34 @@ void	milti_pipe(t_data *data, int fd[2])
 	}
 	ft_close_pipe(fd);
 	ft_close_file(tmp);
-	while (waitpid(pid, NULL, 0) > 0);
-	wait(NULL);
+	return(pid);
+	// while (waitpid(pid, NULL, 0) > 0);
+	// wait(NULL);
 }
-
+void ft_wait_ex(int i)
+{
+	int status;
+	status = 0;
+	waitpid(i, &status, 0);
+	while (wait(NULL) != -1)
+		;
+	if (WIFEXITED(status))
+		g_lobal.ex = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+	{
+		write(1, "\n", 1);
+   		g_lobal.ex = WTERMSIG(status) + 128;
+	}
+}
 void	ft_exec(t_data *data)
 {
 	pid_t	pid;
 	int		fd[2];
+	pid = 0;
 	g_lobal.ex = 0;
-	signal(SIGINT, sigint_handler);
+	signal(SIGINT, SIG_IGN);
 	if (data->cmd && data->next)
-		milti_pipe(data ,fd);
+		pid = milti_pipe(data ,fd);
 	else
 	{
 		
@@ -88,6 +99,7 @@ void	ft_exec(t_data *data)
 		if (pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			out_in_file(data);
 			if(cmd_check(data) > 0)
 				exec_cmd(data);
@@ -95,9 +107,10 @@ void	ft_exec(t_data *data)
 		}
 		else
 		{
-			waitpid(pid, NULL, 0);
+			// waitpid(pid, NULL, 0);
 			ft_close_file(data);
 		}
 		
 	}
+	ft_wait_ex(pid);
 }

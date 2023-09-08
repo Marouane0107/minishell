@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 01:10:02 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/04 12:54:01 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 16:04:20 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,17 @@ void	ffree(char **p)
 	free(p);
 }
 
-int check_char(char c,char s)
+int	check_char(char c, char s)
 {
-	if(s == c)
-		return(1);
-	if(s < 0)
+	if (s == c)
+		return (1);
+	if (s < 0)
 	{
-		if(s == c)
-			return(1);
+		if (s == c)
+			return (1);
 	}
-	 if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ')
+	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'
+		|| c == ' ')
 		return (1);
 	return (0);
 }
@@ -46,8 +47,8 @@ static int	ft_count(char const *s, char c)
 
 	i = 0;
 	count = 0;
-	if(s && !*s)
-		return(1);
+	if (s && !*s)
+		return (1);
 	while (s[i])
 	{
 		if (!check_char(s[0], c) && i == 0)
@@ -60,6 +61,7 @@ static int	ft_count(char const *s, char c)
 	}
 	return (count);
 }
+
 static char	**ft_len(char const *s, char c, char **ps)
 {
 	int	i;
@@ -99,14 +101,14 @@ char	**ft_split(char const *s, char c)
 	p = malloc(sizeof(char *) * (i + 1));
 	if (!p)
 		return (0);
-	if(s && !*s)
+	if (s && !*s)
 	{
 		p[0] = ft_strdup("");
 		p[1] = 0;
 	}
 	else
 		p = ft_len(s, c, p);
-	ft_lstadd(&g_lobal.hold, lst_new(p,0,0));
+	ft_lstadd(&g_lobal.hold, lst_new(p, 0, 0));
 	return (p);
 }
 // static char	**ft_len(char const *s, char c, char **ps)
@@ -123,7 +125,7 @@ char	**ft_split(char const *s, char c)
 // 		while (check_char(s[i], c))
 // 			i++;
 // 		if (!s[i])
-// 			break;
+// 			break ;
 // 		e = i;
 // 		while (!check_char(s[i], c) && s[i])
 // 			i++;

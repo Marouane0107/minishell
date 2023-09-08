@@ -6,12 +6,11 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/07 00:08:48 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:30:38 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_list	*treatin(char *s, t_list *lst)
 {
@@ -30,7 +29,6 @@ t_list	*treatin(char *s, t_list *lst)
 		return (msg_error(lst), NULL);
 	return (lst);
 }
-
 
 int	quote(char *in)
 {
@@ -75,12 +73,6 @@ t_data	*distribut(char *input)
 	data = convert_lst(lst);
 	free_lst(lst);
 	lst = NULL;
-	// while (lst)
-	// {
-	// 	printf("--%s+\n", (lst)->content);
-	// 	printf("---%d++\n", (lst)->token);
-	// 	lst = (lst)->next;
-	// }
 	return (data);
 }
 
@@ -90,7 +82,7 @@ void	sigint_handler(int sig)
 	g_lobal.ex = 130;
 	if (!g_lobal.g)
 		ft_putstr_fd("\n", 1);
-	rl_replace_line("", 0);	
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -98,10 +90,10 @@ void	sigint_handler(int sig)
 void	parss(void)
 {
 	char	*input;
-	int 		x;
-	int 		y;
+	int		x;
+	int		y;
+	t_data	*data;
 
-	t_data *data;
 	data = NULL;
 	g_lobal.env = get_environ();
 	input = NULL;
@@ -124,7 +116,7 @@ void	parss(void)
 		data = distribut(input);
 		if (data && !g_lobal.g)
 			ft_exec(data);
-		if(data)
+		if (data)
 		{
 			free_data(data);
 			data = NULL;
@@ -133,24 +125,25 @@ void	parss(void)
 			continue ;
 	}
 }
+
 // cd .. leaks
 
 // a="ls -l"
-//export a=ls | export a+=l == a=l ??
-//echo ad >a
-//exit 2
-//rm -rf ./ pwd
-//bash ./minishel PATH
-//bash -> ./minishell !env
+// export a=ls | export a+=l == a=l ??
+// echo ad >a
+// exit 2
+// rm -rf ./ pwd
+// bash ./minishel PATH
+// bash -> ./minishell !env
 // $P pwd export export PATH="" export export export declare -x PWD=""
 // export declare -x PWD="/nfs/homes/otamrani"
-//cd .. pwd
+// cd .. pwd
 //////////////////////////////
-// cat gsgrt & cat | fdsa -> exit status echo $? 
-// env -i minishell cmd not work 
+// cat gsgrt & cat | fdsa -> exit status echo $?
+// env -i minishell cmd not work
 //_="/usr/bin/" add command exec in it
 ////echo ad >a
-//tty
+// tty
 // cat l
 // in = 0
 // out = 1
