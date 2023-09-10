@@ -59,7 +59,6 @@ void	check_cmd_path(t_data *data)
 		if (data->cmd[i][0] == '/' || data->cmd[i][0] == '.')
 		{
 			// shlvl(data, data->cmd[i]);
-			printf("cmd : %s\n", data->cmd[i]);
 			if (access(data->cmd[i], X_OK) == -1)
 			{
 				printf("%s: command not found\n", data->cmd[i]);
@@ -67,7 +66,6 @@ void	check_cmd_path(t_data *data)
 			}
 			else if (execve(data->cmd[i], data->cmd, environ) == -1)
 			{
-				printf("lmlawi\n");
 				printf("%s: command not found\n", data->cmd[i]);
 				exit(127);
 			}
@@ -75,7 +73,6 @@ void	check_cmd_path(t_data *data)
 		i++;
 	}
 }
-
 
 void    exution( t_data *data, char **path_part, int i)
 {

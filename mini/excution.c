@@ -92,25 +92,23 @@ void	ft_exec(t_data *data)
 		pid = milti_pipe(data ,fd);
 	else
 	{
-		
-		pid = fork();
-		if (pid == -1)
-			perror("fork");
-		if (pid == 0)
+		out_in_file(data);
+		if(cmd_check(data) > 0)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-			out_in_file(data);
-			if(cmd_check(data) > 0)
+			pid = fork();
+			if (pid == -1)
+				perror("fork");
+			if (pid == 0)
+			{
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
 				exec_cmd(data);
-			exit(0);
+				exit(0);
+			}
+			else
+				waitpid(pid, NULL, 0);
 		}
-		else
-		{
-			// waitpid(pid, NULL, 0);
-			ft_close_file(data);
-		}
-		
+		ft_close_file(data);
 	}
 	ft_wait_ex(pid);
 }

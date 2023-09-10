@@ -18,7 +18,7 @@
 # define REDOUT 3
 # define APPEND 4
 # define HERDOC 5
-# define FILE -1
+# define FIL -1
 # include "./libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
@@ -35,6 +35,8 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+
+# define BUFFER_SIZE 102400
 
 int					quote(char *in);
 void				parss(void);
