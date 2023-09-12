@@ -6,12 +6,11 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:42:14 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/11 23:00:48 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_list	*treatin(char *s, t_list *lst)
 {
@@ -30,7 +29,6 @@ t_list	*treatin(char *s, t_list *lst)
 		return (msg_error(lst), NULL);
 	return (lst);
 }
-
 
 int	quote(char *in)
 {
@@ -58,30 +56,24 @@ int	quote(char *in)
 	return (1);
 }
 
-int	distribut(char *input)
+t_data	*distribut(char *input)
 {
 	t_list	*lst;
 	t_data	*data;
 
+	data = NULL;
 	lst = NULL;
 	if (!*input)
 		return (0);
 	if (!quote(input))
-		return (msg_error(lst), 0);
+		return (msg_error(lst), NULL);
 	lst = treatin(input, lst);
 	if (!lst)
-		return (free_lst(lst), 0);
+		return (free_lst(lst), NULL);
 	data = convert_lst(lst);
 	free_lst(lst);
-	free_data(data);
 	lst = NULL;
-	// while (lst)
-	// {
-	// 	printf("--%s+\n", (lst)->content);
-	// 	printf("---%d++\n", (lst)->token);
-	// 	lst = (lst)->next;
-	// }
-	return (1);
+	return (data);
 }
 
 void	sigint_handler(int sig)
@@ -90,7 +82,7 @@ void	sigint_handler(int sig)
 	g_lobal.ex = 130;
 	if (!g_lobal.g)
 		ft_putstr_fd("\n", 1);
-	rl_replace_line("", 0);	
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -98,14 +90,22 @@ void	sigint_handler(int sig)
 void	parss(void)
 {
 	char	*input;
+	int		x;
+	int		y;
+	t_data	*data;
 
+	data = NULL;
 	g_lobal.env = get_environ();
 	input = NULL;
+	x = dup(0);
+	y = dup(1);
+	g_lobal.ex = 0;
 	while (1)
 	{
 		if (input)
 			free(input);
-		g_lobal.ex = 0;
+		dup2(x, 0);
+		dup2(y, 1);
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
 		input = readline("minishell$ ");
@@ -113,7 +113,42 @@ void	parss(void)
 		if (!input)
 			exit(g_lobal.ex);
 		add_history(input);
-		if (!distribut(input))
+		data = distribut(input);
+		if (data && !g_lobal.g)
+			ft_exec(data);
+		if (data)
+		{
+			free_data(data);
+			data = NULL;
+		}
+		if (!data)
 			continue ;
 	}
 }
+
+// cd .. leaks
+
+// a="ls -l"
+// export a=ls | export a+=l == a=l ??
+// echo ad >a
+// exit 2
+// rm -rf ./ pwd
+// bash ./minishel PATH
+// bash -> ./minishell !env
+// $P pwd export export PATH="" export export export declare -x PWD=""
+// export declare -x PWD="/nfs/homes/otamrani"
+// cd .. pwd
+//////////////////////////////
+// cat gsgrt & cat | fdsa -> exit status echo $?
+// env -i minishell cmd not work
+//_="/usr/bin/" add command exec in it
+////echo ad >a
+// tty
+// cat l
+// in = 0
+// out = 1
+// cmd = [cat]
+// cmd = [l]
+// f
+// f
+// command not found

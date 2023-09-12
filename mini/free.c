@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:16:04 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:28:04 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:45:25 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_free(char **p)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (p[i])
@@ -25,7 +25,7 @@ void	ft_free(char **p)
 	free(p);
 }
 
- void	free_env(t_env *env)
+void	free_env(t_env *env)
 {
 	t_env	*tmp;
 

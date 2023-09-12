@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:25:53 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:41:22 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,50 +35,49 @@ int	ins(char c, int m, int j)
 		return (0);
 }
 
-void  allocate(t_data **data, int i)
+int	noption(t_list **lst)
 {
-    t_data *tmp;
-    (*data)->in = 0;
-    (*data)->out = 1; 
-    (*data)->cmd = NULL;
-    (*data)->next = NULL;
-    tmp = *data;
-    while(i - 1 > 0)
-    {
-        ft_lstadd_back2(&tmp, ft_lstnew2(NULL, -1, 1));
-        tmp = tmp->next;
-        i--;
-    }
+	int	i;
+
+	i = 0;
+	if ((*lst) && (*lst)->token == 1)
+		(*lst) = (*lst)->next;
+	while ((*lst))
+	{
+		if ((*lst)->token == 1)
+			return (i);
+		(*lst) = (*lst)->next;
+		i++;
+	}
+	return (i);
 }
 
-t_data    *convert_lst(t_list *lst)
+void	allocate(t_data **data, int i, t_list *tmp1)
 {
-    char **s;
-    t_data *tmp;
-    t_data *data;
-    (void)data;
-    data = malloc(sizeof(t_data));
-    if(!data)
-        return (0);
-    allocate(&data, count_x(lst, 1) + 1);
-    s = open_here(lst);
-    fill(&data, lst, s);
-    ffree(s);
-    int i = 0;
-    tmp = data;
-    while(tmp)
-    {
-         i = 0;
-        printf("in = %d\n", tmp->in); 
-        printf("out = %d\n", tmp->out); 
-        while(tmp->cmd && tmp->cmd[i])
-        {
-            printf("cmd = [%s]\n", tmp->cmd[i]);
-            i++;
-        }
-        tmp = tmp->next;
-    }
-    return(data);
+	int	j;
+
+	j = 0;
+	while (i > 0)
+	{
+		j = noption(&tmp1);
+		ft_lstadd_back2(data, ft_lstnew2(0, 1, j + 1));
+		i--;
+	}
+}
+
+t_data	*convert_lst(t_list *lst)
+{
+	char	**s;
+	t_list	*tm;
+	t_data	*data;
+
+	data = NULL;
+	tm = lst;
+	allocate(&data, count_x(lst, 1), tm);
+	s = open_here(lst);
+	fill(&data, lst, s);
+	ffree(s);
+	return (data);
 }
 // " '$USER' "
 //  echo ''''''''''$USER''''''''''
@@ -105,7 +104,7 @@ t_data    *convert_lst(t_list *lst)
 // here_doc: shfa
 // here_doc: gfa
 // here_doc: l
-// minishell$ 
+// minishell$
 ///////////////////////////////////////////////////////
 // minishell$ > ""
 // bash: : No such file or directory
@@ -150,4 +149,4 @@ t_data    *convert_lst(t_list *lst)
 // in = 0
 // out = 1
 // cmd = [ls]
-// minishell$ 
+// minishell$

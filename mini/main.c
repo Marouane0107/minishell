@@ -6,18 +6,18 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:53:13 by otamrani          #+#    #+#             */
-/*   Updated: 2023/08/31 17:22:19 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 16:09:57 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+t_global	g_lobal;
 
-t_global g_lobal;
-
-int	main()
+int	main(void)
 {
-	
+	g_lobal.i = 1;
+	g_lobal.j = 0;
 	parss();
 	return (0);
 }

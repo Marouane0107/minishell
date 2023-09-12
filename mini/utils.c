@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 23:02:42 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/02 20:39:56 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/08 15:34:20 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	check_spacial(char *s)
 	}
 	return (0);
 }
+
 // // for filtering error of speacial characters
 int	syntax_error(char *s)
 {
@@ -92,8 +93,8 @@ int	ft_countd(char *str)
 
 void	add_node(t_list **head, char *content, int token)
 {
-	t_list *new;
-	t_list *tmp;
+	t_list	*new;
+	t_list	*tmp;
 
 	new = malloc(sizeof(t_list));
 	new->content = content;
