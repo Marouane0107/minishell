@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 00:54:50 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 02:07:35 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ typedef struct s_global
 	int				g;
 	int				i;
 	int				j;
+	int				new_line;
 	t_env			*env;
 	int				ex;
 	t_grbg			*hold;

@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 01:58:46 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 04:06:43 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,19 @@ int	openin(t_list *tmp, char **s, int j)
 	}
 	return (fd);
 }
+
 void er_amb(char *s)
 {
 	g_lobal.ex = 1;
 	ft_putstr_fd(s, 2);
 	ft_putstr_fd(": ambiguous redirect\n", 2);
 }
+
 int	openout(t_list *lst)
 {
 	int		fd;
-	int		m;
-	char	*s;
 
-	m = lst->next->token;
 	fd = 1;
-	s = lst->next->content;
-	if (m == -3)
-		return (er_amb(s), -3);
 	if (lst->token == 3 && !g_lobal.g)
 	{
 		fd = open(lst->next->content, O_RDWR | O_CREAT | O_TRUNC, 0644);
@@ -76,9 +72,9 @@ void	handle_tokens(t_list **lst, t_data **data, char **s, int j)
 
 	tmp1 = *data;
 	tmp = *lst;
-	if(tmp->token == -3)
+	if(tmp->next->token == -3)
 	{
-		printf("gfgfdds\n");
+		tmp1->in = -3;
 		er_amb(tmp->next->content);
 		ft_skip(lst);
 		return ;
@@ -114,6 +110,7 @@ void	add_cmd(t_list *lst, t_data **tmp)
 		g_lobal.n++;
 	}
 }
+
 int cheker(t_list *lst)
 {
 	if(lst->token == 0 || !lst->next || lst->token == 1)
@@ -122,6 +119,7 @@ int cheker(t_list *lst)
 		return(1);
 	return(0);
 }
+
 void	fill(t_data **data, t_list *lst, char **s)
 {
 	t_data	*tmp;
@@ -150,3 +148,5 @@ void	fill(t_data **data, t_list *lst, char **s)
 		lst = lst->next;
 	}
 }
+
+//need to fix norm

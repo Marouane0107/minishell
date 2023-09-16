@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 01:05:35 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 04:09:50 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,10 @@ t_data	*distribut(char *input)
 	data = NULL;
 	lst = NULL;
 	if (!*input)
+	{
+		g_lobal.ex = 0;
 		return (0);
+	}
 	if (!quote(input))
 		return (msg_error(lst), NULL);
 	lst = treatin(input, lst);
@@ -86,6 +89,7 @@ void	sigint_handler(int sig)
 	rl_on_new_line();
 	rl_redisplay();
 }
+
 void ft_tfree(t_data *data , char *in)
 {
 	if (data)
@@ -96,6 +100,7 @@ void ft_tfree(t_data *data , char *in)
 		if(in)
 			free(in);
 }
+
 void	parss(t_data *data, char *input)
 {
 	int		x;

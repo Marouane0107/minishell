@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 02:00:15 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 03:49:35 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,4 +118,3 @@ int	ft_word(char *s, t_list **lst)
 		ft_lstadd_back(lst, ft_lstnew(wexp, 0));
 	return (1);
 }
-

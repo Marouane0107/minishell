@@ -6,7 +6,7 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 19:58:37 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/16 01:09:50 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 03:42:19 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,18 +120,18 @@ void	ft_exec(t_data *data)
 	signal(SIGINT, SIG_IGN);
 	if (data->cmd && data->next)
 	{
-		if (data->in == -3)
-			return ;
+
+		g_lobal.ex = 0;
 		g_lobal.i = 1;
 		pid = milti_pipe(data, fd);
 	}
 	else
 	{
-		if (data->in == -3)
+		if (data->in == -3 || data->out == -3)
 			return ;
+		g_lobal.ex = 0;
 		singl_cmd(data, pid);
 	}
 	if (g_lobal.i == 1)
 		ft_wait_ex(pid);
-	g_lobal.ex = 0;
 }
