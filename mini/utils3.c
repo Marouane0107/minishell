@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 00:29:50 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 18:54:47 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,21 @@ int	ins(char c, int m, int j)
 	else
 		return (0);
 }
+int ft_len(char **s)
+{
+	int i;
 
+	i = 0;
+	while(s[i])
+		i++;
+	return(i);
+}
 int	noption(t_list **lst)
 {
 	int	i;
 
+	char **s;
+	s = NULL;
 	i = 0;
 	if ((*lst) && (*lst)->token == 1)
 		(*lst) = (*lst)->next;
@@ -47,8 +57,14 @@ int	noption(t_list **lst)
 	{
 		if ((*lst)->token == 1)
 			return (i);
+		if((*lst)->token == -7)
+		{
+				s = ft_split((*lst)->content, ' ');
+				i += ft_len(s);
+		}
+		else
+			i++;
 		(*lst) = (*lst)->next;
-		i++;
 	}
 	return (i);
 }

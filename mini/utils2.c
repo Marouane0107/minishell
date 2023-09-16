@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 03:49:35 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 21:48:54 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,11 @@ int	ft_word(char *s, t_list **lst)
 		return (1);
 	}
 	wexp = check_expend(s, 1);
-	ex_status(&wexp);
+	if(!ft_strchr(s, '\''))
+		ex_status(&wexp);
 	if(g_lobal.spex && !ft_strchr(s, '\"') && !ft_strchr(s, '\''))
 		return(ft_lstadd_back(lst, ft_lstnew(wexp, -7)), 1);
-	if(wexp && !* wexp && !ft_strchr(s, '\"'))
+	if(wexp && !* wexp && !ft_strchr(s, '\"') && !ft_strchr(s, '\''))
 			return(ft_lstadd_back(lst, ft_lstnew(wexp, -6)) , 1);
 	if (end_struct(lst) > 1)
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));

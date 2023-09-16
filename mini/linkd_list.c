@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:28:15 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 15:29:03 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 21:42:15 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_list	*ft_lstnew(char *s, int content)
 {
 	t_list	*node;
 
+	// if(s && !ft_strcmp(s, "''"))
+	// 	s = ft_strdup("");
 	node = NULL;
 	node = malloc(sizeof(t_list));
 	if (!node)
@@ -41,7 +43,7 @@ t_data	*ft_lstnew2(int in, int out, int i)
 	{
 		node->out = out;
 		node->in = in;
-		node->cmd = (char **)ft_calloc(i, sizeof(char *));
+		node->cmd = (char **)ft_calloc((i + 1), sizeof(char *));
 		node->next = NULL;
 	}
 	ft_lstadd(&g_lobal.hold, lst_new(node->cmd, 0, 0));

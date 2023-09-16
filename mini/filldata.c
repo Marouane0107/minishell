@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filldata.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 04:06:43 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/16 18:55:49 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,17 @@ void	handle_tokens(t_list **lst, t_data **data, char **s, int j)
 
 void	add_cmd(t_list *lst, t_data **tmp)
 {
+	char **s;
 
+	s = NULL;
 	if (lst && lst->token == 1)
 		g_lobal.n = 0;
 	if(lst->token == -7)
-		(*tmp)->cmd = ft_split(lst->content, ' ');
+	{
+		s = ft_split(lst->content, ' ');
+		while(*s)
+			(*tmp)->cmd[g_lobal.n++] = *s++;
+	}
 	else if ((*tmp) && (*tmp)->cmd && lst->token == 0)
 	{
 		(*tmp)->cmd[g_lobal.n] = lst->content;
