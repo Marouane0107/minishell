@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 16:12:51 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 00:54:50 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,9 @@
 # include <sys/wait.h>
 # include <unistd.h>
 
-# define BUFFER_SIZE 102400
+# define BUFFER_SIZE 1024
 
 int					quote(char *in);
-void				parss(void);
 void				ft_free(char **p);
 void				ffree(char **p);
 int					ft_strchrr(char *s, char c);
@@ -67,6 +66,7 @@ typedef struct s_grbg
 }					t_grbg;
 typedef struct s_global
 {
+	int 			spex;
 	int				n;
 	int				g;
 	int				i;
@@ -91,6 +91,7 @@ typedef struct s_data
 t_data				*convert_lst(t_list *lst);
 int					openout(t_list *lst);
 int					openin(t_list *tmp, char **s, int j);
+void				parss(t_data *data, char *inp);
 char				*ft_getenv(char *s);
 t_env				*ft_lstdadd_back1(t_env **lst, t_env *new);
 t_grbg				*lst_new(char **p, char *name, char *value);
@@ -111,6 +112,7 @@ void				ft_lstadd_back2(t_data **lst, t_data *new);
 void				ft_exec(t_data *data);
 void				exec_cmd(t_data *data);
 int					milti_pipe(t_data *tmp, int fd[2]);
+void				singl_cmd(t_data *data, pid_t pid);
 void				out_in_file(t_data *data);
 void				parent(int fd[2]);
 void				child(t_data *data, int fd[2]);
@@ -134,6 +136,7 @@ void				ft_lstadd(t_grbg **lst, t_grbg *new);
 t_grbg				*lst_new(char **p, char *name, char *value);
 t_data				*distribut(char *input);
 void				free_lst(t_list *lst);
+char 				*open_rand();
 void				free_env(t_env *env);
 void				free_data(t_data *data);
 char				*ft_get_line(char *s);
@@ -142,7 +145,7 @@ char				*get_next_line(int fd);
 void				sigint_handler(int sig);
 int					get_exp(char *s, int j, char *q, int m);
 t_env				*get_environ(void);
-char				*check_expend(char *s, t_list **lst, int j);
+char				*check_expend(char *s, int j);
 t_data				*ft_lstnew2(int in, int out, int i);
 void				ft_lstadd_back2(t_data **lst, t_data *new);
 int					ft_word(char *s, t_list **lst);
@@ -155,6 +158,8 @@ void				ft_lstadd_back(t_list **lst, t_list *new);
 char				*searsh_env(char *c, int j);
 int					syntax_error(char *str);
 int					check_spacial(char *str);
+void				cmd_not_found(t_data *data, int i);
+void				No_such_file_or_directory(t_data *data);
 void				add_node(t_list **head, char *content, int token);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   openherd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:12:10 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 16:00:08 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 01:41:44 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	ft_skip(t_list **lst)
 {
+	g_lobal.ex = 1;
+
 	while ((*lst))
 	{
 		if ((*lst)->next && (*lst)->next->content[0] == '|')
@@ -39,7 +41,12 @@ char	**open_here(t_list *lst)
 	int		i;
 
 	i = 0;
-	data = malloc(sizeof(char *) * (count_x(lst, 5) + 1));
+	if(count_x(lst , 5) > 17)
+	{
+		ft_putstr_fd("bash: maximum here-document count exceeded\n", 2);
+			exit(2);
+	}
+	data = malloc(sizeof(char *) * (count_x(lst, 5)));
 	if (!data)
 		return (0);
 	while (lst && !g_lobal.g)
@@ -78,7 +85,7 @@ char	*stock(char *av, t_list *lst)
 		if (line && lst->next->token != -2)
 		{
 			quote(line);
-			line = check_expend(line, &lst, 0);
+			line = check_expend(line, 0);
 		}
 		tmp = ft_strjoin(line, "\n");
 		all = ft_strjoin(all, tmp);

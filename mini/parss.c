@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parss.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 15:30:38 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 01:05:35 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,24 +86,25 @@ void	sigint_handler(int sig)
 	rl_on_new_line();
 	rl_redisplay();
 }
-
-void	parss(void)
+void ft_tfree(t_data *data , char *in)
 {
-	char	*input;
+	if (data)
+		{
+			free_data(data);
+			data = NULL;
+		}
+		if(in)
+			free(in);
+}
+void	parss(t_data *data, char *input)
+{
 	int		x;
 	int		y;
-	t_data	*data;
 
-	data = NULL;
-	g_lobal.env = get_environ();
-	input = NULL;
 	x = dup(0);
 	y = dup(1);
-	g_lobal.ex = 0;
 	while (1)
 	{
-		if (input)
-			free(input);
 		dup2(x, 0);
 		dup2(y, 1);
 		signal(SIGINT, sigint_handler);
@@ -116,11 +117,7 @@ void	parss(void)
 		data = distribut(input);
 		if (data && !g_lobal.g)
 			ft_exec(data);
-		if (data)
-		{
-			free_data(data);
-			data = NULL;
-		}
+		ft_tfree(data, input);
 		if (!data)
 			continue ;
 	}
@@ -150,5 +147,5 @@ void	parss(void)
 // cmd = [cat]
 // cmd = [l]
 // f
-// f
+// f		if (data && !g_lobal.g)
 // command not found

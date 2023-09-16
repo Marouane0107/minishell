@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 15:41:22 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 00:29:50 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	msg_error(t_list *lst)
 {
 	int	i;
 
+	g_lobal.ex = 1;
 	i = end_struct(&lst);
 	if (i == 1)
 		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);

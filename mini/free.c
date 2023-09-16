@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:16:04 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 15:45:25 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 00:38:44 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,15 @@ void	free_lst(t_list *lst)
 		lst = lst->next;
 		free(tmp);
 	}
+}
+char *open_rand()
+{
+	char rand[3];
+	char *her;
+	int i;
+	i = open("/dev/random", O_RDWR);
+	read(i, rand, 2);
+	her = ft_strjoin("/tmp/", rand);
+	close(i);
+	return(her);
 }

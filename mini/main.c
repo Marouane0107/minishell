@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:53:13 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 16:09:57 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 00:21:58 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 t_global	g_lobal;
 
 int	main(void)
-{
+{	
+	char *input;
+	t_data *data;
+	g_lobal.env = get_environ();
+	g_lobal.ex = 0;
+	data = NULL;
+	input = NULL;
 	g_lobal.i = 1;
 	g_lobal.j = 0;
-	parss();
+	parss(data , input);
 	return (0);
 }

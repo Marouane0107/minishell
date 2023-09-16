@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   filldata.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 15:44:51 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/16 01:58:46 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,19 @@
 int	openin(t_list *tmp, char **s, int j)
 {
 	int		fd;
-	char	*here;
-
+	char   *rand;
+	
+	rand = NULL;
 	fd = 0;
 	if (tmp->token == 5 && !g_lobal.g)
 	{
-		here = ft_strjoin("/tmp/her1", ft_itoa(j));
-		fd = open(here, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		rand = open_rand();
+		fd = open(rand, O_RDWR | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 			return (perror("open"), -3);
 		ft_putstr_fd(s[j], fd);
 		close(fd);
-		fd = open(here, O_RDONLY);
+		fd = open(rand, O_RDONLY);
 	}
 	else if (!g_lobal.g)
 	{
@@ -36,7 +37,12 @@ int	openin(t_list *tmp, char **s, int j)
 	}
 	return (fd);
 }
-
+void er_amb(char *s)
+{
+	g_lobal.ex = 1;
+	ft_putstr_fd(s, 2);
+	ft_putstr_fd(": ambiguous redirect\n", 2);
+}
 int	openout(t_list *lst)
 {
 	int		fd;
@@ -47,10 +53,7 @@ int	openout(t_list *lst)
 	fd = 1;
 	s = lst->next->content;
 	if (m == -3)
-	{
-		printf("bash: %s: ambiguous redirect\n", s);
-		return (ft_skip(&lst), 1);
-	}
+		return (er_amb(s), -3);
 	if (lst->token == 3 && !g_lobal.g)
 	{
 		fd = open(lst->next->content, O_RDWR | O_CREAT | O_TRUNC, 0644);
@@ -73,6 +76,13 @@ void	handle_tokens(t_list **lst, t_data **data, char **s, int j)
 
 	tmp1 = *data;
 	tmp = *lst;
+	if(tmp->token == -3)
+	{
+		printf("gfgfdds\n");
+		er_amb(tmp->next->content);
+		ft_skip(lst);
+		return ;
+	}
 	if (tmp->token == 2 || tmp->token == 5)
 	{
 		if (tmp1->in > 1)
@@ -93,15 +103,25 @@ void	handle_tokens(t_list **lst, t_data **data, char **s, int j)
 
 void	add_cmd(t_list *lst, t_data **tmp)
 {
+
 	if (lst && lst->token == 1)
 		g_lobal.n = 0;
-	else if (lst->token == 0 && (*tmp) && (*tmp)->cmd)
+	if(lst->token == -7)
+		(*tmp)->cmd = ft_split(lst->content, ' ');
+	else if ((*tmp) && (*tmp)->cmd && lst->token == 0)
 	{
 		(*tmp)->cmd[g_lobal.n] = lst->content;
 		g_lobal.n++;
 	}
 }
-
+int cheker(t_list *lst)
+{
+	if(lst->token == 0 || !lst->next || lst->token == 1)
+		return(1);
+	if(lst->token == -7)
+		return(1);
+	return(0);
+}
 void	fill(t_data **data, t_list *lst, char **s)
 {
 	t_data	*tmp;
@@ -112,7 +132,7 @@ void	fill(t_data **data, t_list *lst, char **s)
 	g_lobal.n = 0;
 	while (lst)
 	{
-		if (lst->token == 0 || !lst->next || lst->token == 1)
+		if (cheker(lst))
 			add_cmd(lst, &tmp);
 		if (lst->token == 1)
 		{

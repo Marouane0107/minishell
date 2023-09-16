@@ -6,11 +6,11 @@
 /*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 00:25:08 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/05 15:53:54 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/15 01:28:31 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	ft_close_pipe(int fd[2])
 {
@@ -42,14 +42,14 @@ void	out_in_file(t_data *data)
 	}
 }
 
-void    parent(int fd[2])
+void	parent(int fd[2])
 {
 	if (dup2(fd[0], 0) == -1)
 		perror("dup2");
 	ft_close_pipe(fd);
 }
 
-void child(t_data *data, int fd[2])
+void	child(t_data *data, int fd[2])
 {
 	out_in_file(data);
 	if (data->out == -1)
@@ -57,9 +57,9 @@ void child(t_data *data, int fd[2])
 		if (dup2(fd[1], 1) == -1)
 			perror("dup2");
 		ft_close_pipe(fd);
-		if(cmd_check(data) > 0)
+		if (cmd_check(data) > 0)
 			exec_cmd(data);
-		exit(0);
+		exit(g_lobal.ex);
 	}
 	else if (data->out != -1)
 	{
@@ -71,8 +71,8 @@ void child(t_data *data, int fd[2])
 		if (dup2(1, fd[1]) == -1)
 			perror("dup2");
 		ft_close_pipe(fd);
-		if(cmd_check(data) > 0)
+		if (cmd_check(data) > 0)
 			exec_cmd(data);
-		exit(0);
+		exit(g_lobal.ex);
 	}
 }
