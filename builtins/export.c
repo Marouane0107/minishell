@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:41:30 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/06 17:15:20 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/15 01:24:09 by maouzal          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	name_check(char	*name)
 	if (name[0] >= 48 && name[0] <= 57)
 	{
 		printf("minishell: export: `%s': not a valid identifier\n", name);
+		g_lobal.ex = 1;
 		return (1);
 	}
 	while (name[i])
@@ -32,13 +33,36 @@ int	name_check(char	*name)
 		else
 		{
 			printf("minishell: export: `%s': not a valid identifier\n", name);
-			return (1) ;
+			g_lobal.ex = 1;
+			return (1);
 		}
 	}
 	return (0);
 }
 
-void ft_add_env(t_data *data, char *s)
+char	*add_env_norm(t_data *data, char *s, char *name, int i)
+{
+	if (s[0] != '=' && s[i] == '=' && s[i - 1] == '+')
+	{
+		i--;
+		data->f = 1;
+	}
+	name = ft_substr(s, 0, i);
+	if (!*name)
+	{
+		printf("minishell: export: `%s': not a valid identifier\n",
+			data->cmd[g_lobal.j]);
+		g_lobal.ex = 1;
+		return (0);
+	}
+	if (name_check(name))
+		return (0);
+	if (data->f == 1)
+		i++;
+	return (name);
+}
+
+void	ft_add_env(t_data *data, char *s)
 {
 	char	*name;
 	char	*value;
@@ -50,21 +74,9 @@ void ft_add_env(t_data *data, char *s)
 	data->f = 0;
 	while (s[i] && s[i] != '=')
 		i++;
-	if (s[0] != '=' && s[i] == '=' && s[i - 1] == '+')
-	{
-		i--;
-		data->f = 1;
-	}
-	name = ft_substr(s, 0, i);
-	if (!*name)
-	{
-		printf("minishell: export: `%s': not a valid identifier\n", data->cmd[g_lobal.j]);
-		return ;	
-	}
-	if (name_check(name))
+	name = add_env_norm(data, s, name, i);
+	if (!name)
 		return ;
-	if (data->f == 1)
-		i++;
 	if (s[i] == '=')
 	{
 		i++;
@@ -76,12 +88,11 @@ void ft_add_env(t_data *data, char *s)
 		ft_lstdadd_back1(&g_lobal.env, ft_lstnew1(name, value));
 }
 
-void	print_export()
+void	print_export(void)
 {
 	t_env	*tmp;
 
 	tmp = g_lobal.env;
-	
 	while (tmp)
 	{
 		if (tmp->value)
@@ -92,12 +103,10 @@ void	print_export()
 	}
 }
 
-
 void	ft_export(t_data *data)
 {
-	int	i;
+	int		i;
 	t_env	*tmp;
-	(void)tmp;
 
 	i = 1;
 	tmp = g_lobal.env;
