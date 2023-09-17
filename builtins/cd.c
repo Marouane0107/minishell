@@ -78,9 +78,7 @@ void	change_path(t_data *data, char *path)
 void	cd_check(t_data *data, struct stat path_stat)
 {
 	if (S_ISDIR(path_stat.st_mode))
-	{
 		change_path(data, data->cmd[1]);
-	}
 	else if (S_ISREG(path_stat.st_mode))
 	{
 		ft_putstr_fd("cd: ", 2);

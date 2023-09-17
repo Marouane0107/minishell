@@ -79,7 +79,10 @@ void	ft_exit(t_data *data)
 			numiric_arg(data);
 		ft_putstr_fd("exit\n", 1);
 		ft_putstr_fd("minishell: exit: too many arguments\n", 1);
-		return ;
+		if (g_lobal.ex == 0)
+			exit(1);
+		else
+			exit(g_lobal.ex);
 	}
 	exit(g_lobal.ex);
 }
