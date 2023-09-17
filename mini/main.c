@@ -14,12 +14,13 @@
 
 t_global	g_lobal;
 
-int	main(int  ac, char **av)
+int	main(int ac, char **av)
 {
 	char	*input;
 	t_data	*data;
+
 	(void)av;
-	if(ac > 1)
+	if (ac > 1)
 		exit(127);
 	g_lobal.env = get_environ();
 	g_lobal.ex = 0;

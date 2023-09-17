@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/17 03:56:23 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:52:30 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,4 +168,5 @@ void				add_node(t_list **head, char *content, int token);
 int					flen(char **s);
 void				ft_tfree(t_data *data, char *in);
 void				short_f(t_data *tmp1, t_list **lst, t_list *tmp);
+void				ft_exitcd(void);
 #endif

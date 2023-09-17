@@ -37,7 +37,7 @@ void	numiric_arg(t_data *data)
 
 void	sine_check(t_data *data, int i)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	if (!*data->cmd[1])
@@ -57,7 +57,7 @@ void	sine_check(t_data *data, int i)
 			numiric_arg(data);
 	}
 	while (ft_isdigit(data->cmd[1][j]))
-			j++;
+		j++;
 	if (data->cmd[1][j] == '\0')
 		exit(ft_atoi(data->cmd[1]));
 	else

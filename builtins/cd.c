@@ -100,7 +100,7 @@ void	cd_check(t_data *data, struct stat path_stat)
 void	ft_cd(t_data *data)
 {
 	struct stat	path_stat;
-	char	*path;
+	char		*path;
 
 	path = data->cmd[1];
 	if (data->cmd[1] && data->cmd[2])

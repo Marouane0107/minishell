@@ -64,32 +64,33 @@ int	milti_pipe(t_data *data, int fd[2])
 	return (pid);
 }
 
-void    ft_wait_ex(int i)
+void	ft_wait_ex(int i)
 {
-    int    status;
-    int    j;
-    int    b;
+	int	status;
+	int	j;
+	int	b;
 
-    status = 0;
-    waitpid(i, &status, 0);
-    b = 0;
-    if (WIFEXITED(status))
-        g_lobal.ex = WEXITSTATUS(status);
-    if (WIFSIGNALED(status))
-    {
-        write(1, "\n", 1);
-        g_lobal.ex = WTERMSIG(status) + 128;
-        b = 1;
-    }
-    while (wait(&j) != -1)
-    {
-        if (WIFSIGNALED(j) && !b && j != 13)
-        {
-            write(1, "\n", 1);
-            break ;
-        }
-    }
-    while (wait(&j) != -1);
+	status = 0;
+	waitpid(i, &status, 0);
+	b = 0;
+	if (WIFEXITED(status))
+		g_lobal.ex = WEXITSTATUS(status);
+	if (WIFSIGNALED(status))
+	{
+		write(1, "\n", 1);
+		g_lobal.ex = WTERMSIG(status) + 128;
+		b = 1;
+	}
+	while (wait(&j) != -1)
+	{
+		if (WIFSIGNALED(j) && !b && j != 13)
+		{
+			write(1, "\n", 1);
+			break ;
+		}
+	}
+	while (wait(&j) != -1)
+		;
 }
 
 void	singl_cmd(t_data *data, pid_t pid)

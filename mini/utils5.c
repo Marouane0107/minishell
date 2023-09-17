@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:25:17 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/03 17:56:28 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/17 21:53:29 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,10 @@ t_env	*ft_lstnew1(char *name, char *value)
 		node->next = NULL;
 	}
 	return (node);
+}
+
+void	ft_exitcd(void)
+{
+	write(1, "exit\n", 6);
+	exit(g_lobal.ex);
 }
