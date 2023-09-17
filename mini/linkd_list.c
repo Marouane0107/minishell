@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:28:15 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 21:42:15 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 01:42:09 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ t_list	*ft_lstnew(char *s, int content)
 {
 	t_list	*node;
 
-	// if(s && !ft_strcmp(s, "''"))
-	// 	s = ft_strdup("");
 	node = NULL;
 	node = malloc(sizeof(t_list));
 	if (!node)

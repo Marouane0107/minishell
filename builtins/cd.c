@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 17:28:43 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/15 22:33:22 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/17 04:11:42 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,22 +24,6 @@ int	ft_export_check(char *name)
 		tmp = tmp->next;
 	}
 	return (1);
-}
-
-char	*ft_getenv(char *s)
-{
-	t_env	*tmp;
-
-	tmp = g_lobal.env;
-	while (tmp)
-	{
-		if (tmp && !ft_strcmp(tmp->name, s))
-		{
-			return (tmp->value);
-		}
-		tmp = tmp->next;
-	}
-	return (0);
 }
 
 int	ft_setenv(t_data *data, char *s, char *value)
@@ -74,42 +58,69 @@ void	change_path(t_data *data, char *path)
 {
 	char	*old_path;
 	char	*new_path;
+	char	*pwd;
 
 	old_path = NULL;
+	pwd = NULL;
 	new_path = NULL;
 	old_path = getcwd(old_path, 0);
 	if (!chdir(path))
 	{
+		g_lobal.pwd = getcwd(pwd, 0);
+		ft_lstadd(&g_lobal.hold, lst_new(0, g_lobal.pwd, 0));
 		new_path = getcwd(new_path, 0);
 		ft_setenv(data, "PWD", new_path);
 		ft_setenv(data, "OLDPWD", old_path);
 	}
 }
 
-void	ft_cd(t_data *data)
+void	cd_check(t_data *data, struct stat path_stat)
 {
-	if (data->cmd[1] && data->cmd[2])
+	if (S_ISDIR(path_stat.st_mode))
 	{
-		ft_putstr_fd("cd: too many arguments\n", 2);
-		g_lobal.ex = 1;
-		return ;
+		change_path(data, data->cmd[1]);
 	}
-	else if (!(data->cmd[1]) || !(ft_strcmp(data->cmd[1], "~")))
-		change_path(data, ft_getenv("HOME"));
-	else if (access(data->cmd[1], X_OK) == -1
-		&& access(data->cmd[1], F_OK) == -1)
-		No_such_file_or_directory(data);
-	else if (access(data->cmd[1], F_OK) == 0
-		&& access(data->cmd[1], X_OK) == -1)
+	else if (S_ISREG(path_stat.st_mode))
 	{
 		ft_putstr_fd("cd: ", 2);
 		ft_putstr_fd(data->cmd[1], 2);
 		ft_putstr_fd(": Not a directory\n", 2);
 		g_lobal.ex = 1;
 	}
-	else if (access(data->cmd[1], F_OK) == 0
-		&& access(data->cmd[1], X_OK) == 0)
-		change_path(data, data->cmd[1]);
 	else
-		No_such_file_or_directory(data);
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(data->cmd[1], 2);
+		ft_putstr_fd(": Unknown file type\n", 2);
+		g_lobal.ex = 1;
+	}
+}
+
+void	ft_cd(t_data *data)
+{
+	struct stat	path_stat;
+	const char	*path;
+
+	path = data->cmd[1];
+	if (data->cmd[1] && data->cmd[2])
+	{
+		ft_putstr_fd("cd: too many arguments\n", 2);
+		g_lobal.ex = 1;
+		return ;
+	}
+	if (!path || !ft_strcmp(path, "~"))
+	{
+		change_path(data, ft_getenv("HOME"));
+	}
+	else
+	{
+		if (stat(data->cmd[1], &path_stat) == 0)
+		{
+			cd_check(data, path_stat);
+		}
+		else
+		{
+			no_such_file_or_directory(data);
+		}
+	}
 }

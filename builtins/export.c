@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:41:30 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/15 01:24:09 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/17 01:24:53 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,8 @@ void	print_export(void)
 void	ft_export(t_data *data)
 {
 	int		i;
-	t_env	*tmp;
 
 	i = 1;
-	tmp = g_lobal.env;
 	if (!data->cmd[1])
 	{
 		print_export();

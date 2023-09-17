@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:28:50 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 02:07:35 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/17 03:56:23 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef struct s_grbg
 }					t_grbg;
 typedef struct s_global
 {
-	int 			spex;
+	int				spex;
+	char			*pwd;
 	int				n;
 	int				g;
 	int				i;
@@ -137,11 +138,13 @@ void				ft_lstadd(t_grbg **lst, t_grbg *new);
 t_grbg				*lst_new(char **p, char *name, char *value);
 t_data				*distribut(char *input);
 void				free_lst(t_list *lst);
-char 				*open_rand();
+char				*open_rand(void);
 void				free_env(t_env *env);
 void				free_data(t_data *data);
+int					cheker(t_list *lst);
 char				*ft_get_line(char *s);
 char				*ft_str(char s);
+void				er_amb(char *s);
 char				*get_next_line(int fd);
 void				sigint_handler(int sig);
 int					get_exp(char *s, int j, char *q, int m);
@@ -160,7 +163,9 @@ char				*searsh_env(char *c, int j);
 int					syntax_error(char *str);
 int					check_spacial(char *str);
 void				cmd_not_found(t_data *data, int i);
-void				No_such_file_or_directory(t_data *data);
+void				no_such_file_or_directory(t_data *data);
 void				add_node(t_list **head, char *content, int token);
-
+int					flen(char **s);
+void				ft_tfree(t_data *data, char *in);
+void				short_f(t_data *tmp1, t_list **lst, t_list *tmp);
 #endif

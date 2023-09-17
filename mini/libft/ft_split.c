@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/04 01:10:02 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/08 16:04:20 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 01:36:11 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,11 @@ static int	ft_count(char const *s, char c)
 	return (count);
 }
 
-static char	**ft_len(char const *s, char c, char **ps)
+static char	**ft_len(char const *s, char c, char **ps, int e)
 {
 	int	i;
 	int	j;
-	int	e;
 
-	e = 0;
 	j = 0;
 	i = 0;
 	while (s[i])
@@ -85,18 +83,21 @@ static char	**ft_len(char const *s, char c, char **ps)
 				j++;
 			}
 		}
-		(s[i] != 0) && (i++);
+		if (s[i] != 0)
+			i++;
 	}
 	return (ps[j] = NULL, ps);
 }
 
 char	**ft_split(char const *s, char c)
 {
+	int		e;
 	int		i;
 	char	**p;
 
 	if (!s)
 		return (0);
+	e = 0;
 	i = ft_count(s, c);
 	p = malloc(sizeof(char *) * (i + 1));
 	if (!p)
@@ -107,7 +108,7 @@ char	**ft_split(char const *s, char c)
 		p[1] = 0;
 	}
 	else
-		p = ft_len(s, c, p);
+		p = ft_len(s, c, p, e);
 	ft_lstadd(&g_lobal.hold, lst_new(p, 0, 0));
 	return (p);
 }

@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 11:40:02 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/16 21:48:40 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 03:47:16 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	get_cmd(t_data *data)
 			return ;
 	}
 }
-
 
 void	check_cmd_path(t_data *data)
 {
@@ -57,15 +56,15 @@ void	check_cmd_path(t_data *data)
 	}
 }
 
-void	exution( t_data *data, char **path_part, int i)
+void	exution(t_data *data, char **path_part, int i)
 {
 	char		*cmd_path;
 	char		*path_cmd;
 	extern char	**environ;
 
 	if (!*data->cmd[0])
-		return (ft_putstr_fd("'': command not found\n", 2),
-			g_lobal.ex = 127, exit(127));
+		return (ft_putstr_fd("'': command not found\n", 2), g_lobal.ex = 127,
+			exit(127));
 	while (path_part && path_part[i])
 	{
 		cmd_path = ft_strjoin(path_part[i], "/");
@@ -92,6 +91,8 @@ void	exec_cmd(t_data *data)
 
 	i = 0;
 	if (!data->cmd || !*data->cmd)
+		return ;
+	if (data->in == -3 || data->out == -3)
 		return ;
 	path = ft_getenv("PATH");
 	if (data->cmd[i][0] == '/' || data->cmd[i][0] == '.')

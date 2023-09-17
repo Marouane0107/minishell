@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:09 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/16 03:35:33 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/17 04:14:50 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ int	ft_echo_norm(t_data *data, int i, int j, int k)
 	if (data->cmd[1][0] == '-' && data->cmd[1][1] == 'n')
 	{
 		g_lobal.new_line = 1;
-		while (data->cmd[i] && g_lobal.new_line == 1 && data->cmd[i][0] == '-' && data->cmd[i][1] == 'n')
+		while (data->cmd[i] && g_lobal.new_line == 1 && data->cmd[i][0] == '-'
+			&& data->cmd[i][1] == 'n')
 		{
 			while (data->cmd[i][j] == 'n')
 				j++;
@@ -65,4 +66,3 @@ void	ft_echo(t_data *data)
 	if (g_lobal.new_line == 0)
 		printf("\n");
 }
-

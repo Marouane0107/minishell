@@ -91,7 +91,7 @@ char	*searsh_env(char *c, int j)
 		{
 			if (ft_strchr(tmp->value, ' ') && j == 11)
 				return (ft_strjoin("$", c));
-			if(ft_strchr(tmp->value, ' '))
+			if (ft_strchr(tmp->value, ' '))
 				g_lobal.spex = 1;
 			return (ft_strdup(tmp->value));
 		}

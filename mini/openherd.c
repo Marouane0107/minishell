@@ -15,7 +15,6 @@
 void	ft_skip(t_list **lst)
 {
 	g_lobal.ex = 1;
-
 	while ((*lst))
 	{
 		if ((*lst)->next && (*lst)->next->content[0] == '|')
@@ -41,10 +40,10 @@ char	**open_here(t_list *lst)
 	int		i;
 
 	i = 0;
-	if(count_x(lst , 5) > 17)
+	if (count_x(lst, 5) > 17)
 	{
 		ft_putstr_fd("bash: maximum here-document count exceeded\n", 2);
-			exit(2);
+		exit(2);
 	}
 	data = malloc(sizeof(char *) * (count_x(lst, 5)));
 	if (!data)

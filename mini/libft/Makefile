@@ -1,6 +1,6 @@
-CC = gcc 
+CC = cc 
 CREAT = ar -rc
-# CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
 FILES = ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_strlen \
 	   ft_toupper ft_tolower ft_strchr ft_strrchr ft_strcmp \

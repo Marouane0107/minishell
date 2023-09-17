@@ -15,15 +15,16 @@
 t_global	g_lobal;
 
 int	main(void)
-{	
-	char *input;
-	t_data *data;
+{
+	char	*input;
+	t_data	*data;
+
 	g_lobal.env = get_environ();
 	g_lobal.ex = 0;
 	data = NULL;
 	input = NULL;
 	g_lobal.i = 1;
 	g_lobal.j = 0;
-	parss(data , input);
+	parss(data, input);
 	return (0);
 }

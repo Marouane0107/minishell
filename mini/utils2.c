@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/08 15:56:20 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 21:48:54 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 02:13:52 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ int	ambigus(char *s, t_list **lst)
 		return (0);
 	if (end_struct(lst) == 3 || end_struct(lst) == 4)
 		return (1);
-	if(end_struct(lst) == 2)
-		return(1);
+	if (end_struct(lst) == 2)
+		return (1);
 	return (0);
 }
 
@@ -98,21 +98,20 @@ int	ft_word(char *s, t_list **lst)
 		return (ofherdoc(s, lst), 1);
 	if (ambigus(s, lst))
 	{
-		wexp = check_expend(s,11);
+		wexp = check_expend(s, 11);
 		ex_status(&wexp);
 		if (wexp[0] == '$')
-			ft_lstadd_back(lst, ft_lstnew(wexp, -3));
+			return (ft_lstadd_back(lst, ft_lstnew(wexp, -3)), 1);
 		else
-			ft_lstadd_back(lst, ft_lstnew(wexp, -1));
-		return (1);
+			return (ft_lstadd_back(lst, ft_lstnew(wexp, -1)), 1);
 	}
 	wexp = check_expend(s, 1);
-	if(!ft_strchr(s, '\''))
+	if (!ft_strchr(s, '\''))
 		ex_status(&wexp);
-	if(g_lobal.spex && !ft_strchr(s, '\"') && !ft_strchr(s, '\''))
-		return(ft_lstadd_back(lst, ft_lstnew(wexp, -7)), 1);
-	if(wexp && !* wexp && !ft_strchr(s, '\"') && !ft_strchr(s, '\''))
-			return(ft_lstadd_back(lst, ft_lstnew(wexp, -6)) , 1);
+	if (g_lobal.spex && !ft_strchr(s, '\"') && !ft_strchr(s, '\''))
+		return (ft_lstadd_back(lst, ft_lstnew(wexp, -7)), 1);
+	if (wexp && !*wexp && !ft_strchr(s, '\"') && !ft_strchr(s, '\''))
+		return (ft_lstadd_back(lst, ft_lstnew(wexp, -6)), 1);
 	if (end_struct(lst) > 1)
 		ft_lstadd_back(lst, ft_lstnew(wexp, -1));
 	else

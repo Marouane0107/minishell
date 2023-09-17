@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 18:55:49 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 02:07:46 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	openin(t_list *tmp, char **s, int j)
 {
 	int		fd;
-	char   *rand;
-	
+	char	*rand;
+
 	rand = NULL;
 	fd = 0;
 	if (tmp->token == 5 && !g_lobal.g)
@@ -38,16 +38,9 @@ int	openin(t_list *tmp, char **s, int j)
 	return (fd);
 }
 
-void er_amb(char *s)
-{
-	g_lobal.ex = 1;
-	ft_putstr_fd(s, 2);
-	ft_putstr_fd(": ambiguous redirect\n", 2);
-}
-
 int	openout(t_list *lst)
 {
-	int		fd;
+	int	fd;
 
 	fd = 1;
 	if (lst->token == 3 && !g_lobal.g)
@@ -72,7 +65,7 @@ void	handle_tokens(t_list **lst, t_data **data, char **s, int j)
 
 	tmp1 = *data;
 	tmp = *lst;
-	if(tmp->next->token == -3)
+	if (tmp->next->token == -3)
 	{
 		tmp1->in = -3;
 		er_amb(tmp->next->content);
@@ -88,26 +81,20 @@ void	handle_tokens(t_list **lst, t_data **data, char **s, int j)
 			ft_skip(lst);
 	}
 	else if (tmp->token == 4 || tmp->token == 3)
-	{
-		if (tmp1->out > 1)
-			close(tmp1->out);
-		tmp1->out = openout(tmp);
-		if (tmp1->out == -3)
-			ft_skip(lst);
-	}
+		short_f(tmp1, lst, tmp);
 }
 
 void	add_cmd(t_list *lst, t_data **tmp)
 {
-	char **s;
+	char	**s;
 
 	s = NULL;
 	if (lst && lst->token == 1)
 		g_lobal.n = 0;
-	if(lst->token == -7)
+	if (lst->token == -7)
 	{
 		s = ft_split(lst->content, ' ');
-		while(*s)
+		while (*s)
 			(*tmp)->cmd[g_lobal.n++] = *s++;
 	}
 	else if ((*tmp) && (*tmp)->cmd && lst->token == 0)
@@ -115,15 +102,6 @@ void	add_cmd(t_list *lst, t_data **tmp)
 		(*tmp)->cmd[g_lobal.n] = lst->content;
 		g_lobal.n++;
 	}
-}
-
-int cheker(t_list *lst)
-{
-	if(lst->token == 0 || !lst->next || lst->token == 1)
-		return(1);
-	if(lst->token == -7)
-		return(1);
-	return(0);
 }
 
 void	fill(t_data **data, t_list *lst, char **s)
@@ -154,5 +132,3 @@ void	fill(t_data **data, t_list *lst, char **s)
 		lst = lst->next;
 	}
 }
-
-//need to fix norm
