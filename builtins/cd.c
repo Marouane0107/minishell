@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 17:28:43 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/17 04:11:42 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 19:58:21 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ void	change_path(t_data *data, char *path)
 		ft_setenv(data, "PWD", new_path);
 		ft_setenv(data, "OLDPWD", old_path);
 	}
+	ft_lstadd(&g_lobal.hold, lst_new(0, new_path, old_path));
 }
 
 void	cd_check(t_data *data, struct stat path_stat)
@@ -99,7 +100,7 @@ void	cd_check(t_data *data, struct stat path_stat)
 void	ft_cd(t_data *data)
 {
 	struct stat	path_stat;
-	const char	*path;
+	char	*path;
 
 	path = data->cmd[1];
 	if (data->cmd[1] && data->cmd[2])
@@ -123,4 +124,5 @@ void	ft_cd(t_data *data)
 			no_such_file_or_directory(data);
 		}
 	}
+	free(path);
 }

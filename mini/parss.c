@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:51:09 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/17 03:54:45 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:09:08 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,10 @@ void	parss(t_data *data, char *input)
 		input = readline("minishell$ ");
 		g_lobal.g = 0;
 		if (!input)
+		{
+			write(1,"exit\n",6);
 			exit(g_lobal.ex);
+		}
 		if (input && *input)
 			add_history(input);
 		data = distribut(input);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maouzal <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 16:53:13 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/16 00:21:58 by maouzal          ###   ########.fr       */
+/*   Updated: 2023/09/17 17:06:20 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 
 t_global	g_lobal;
 
-int	main(void)
+int	main(int  ac, char **av)
 {
 	char	*input;
 	t_data	*data;
-
+	(void)av;
+	if(ac > 1)
+		exit(127);
 	g_lobal.env = get_environ();
 	g_lobal.ex = 0;
 	data = NULL;

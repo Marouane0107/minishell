@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 13:50:44 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/17 02:20:51 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 16:22:51 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	msg_error(t_list *lst)
 {
 	int	i;
 
-	g_lobal.ex = 1;
+	g_lobal.ex = 2;
 	i = end_struct(&lst);
 	if (i == 1)
 		ft_putstr_fd("bash: syntax error near unexpected token `|'\n", 2);

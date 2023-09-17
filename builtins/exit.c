@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:16 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/17 03:56:14 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 18:41:23 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ void	numiric_arg(t_data *data)
 
 void	sine_check(t_data *data, int i)
 {
+	int j;
+
+	j = 0;
 	if (!*data->cmd[1])
 		numiric_arg(data);
 	if (data->cmd[1][0] == '-' && data->cmd[1][1] == '-')
@@ -53,6 +56,12 @@ void	sine_check(t_data *data, int i)
 		else
 			numiric_arg(data);
 	}
+	while (ft_isdigit(data->cmd[1][j]))
+			j++;
+	if (data->cmd[1][j] == '\0')
+		exit(ft_atoi(data->cmd[1]));
+	else
+		numiric_arg(data);
 }
 
 void	ft_exit(t_data *data)

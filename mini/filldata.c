@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 20:23:23 by otamrani          #+#    #+#             */
-/*   Updated: 2023/09/17 02:07:46 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 16:32:32 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ int	openout(t_list *lst)
 	fd = 1;
 	if (lst->token == 3 && !g_lobal.g)
 	{
-		fd = open(lst->next->content, O_RDWR | O_CREAT | O_TRUNC, 0644);
+		fd = open(lst->next->content, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 			return (perror("open"), -3);
 	}
 	else if (lst->token == 4 && !g_lobal.g)
 	{
-		fd = open(lst->next->content, O_RDWR | O_CREAT | O_APPEND, 0644);
+		fd = open(lst->next->content, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 			return (perror("open"), -3);
 	}
