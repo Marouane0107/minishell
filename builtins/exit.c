@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 16:50:16 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/17 18:41:23 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 21:59:41 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	sine_check(t_data *data, int i)
 	if (!*data->cmd[1])
 		numiric_arg(data);
 	if (data->cmd[1][0] == '-' && data->cmd[1][1] == '-')
-		exit(0);
+		exit(g_lobal.ex);
 	if (data->cmd[1][i] == '+' || data->cmd[1][i] == '-')
 	{
 		if (data->cmd[1][i + 1] == '\0')

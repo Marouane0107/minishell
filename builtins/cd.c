@@ -6,7 +6,7 @@
 /*   By: otamrani <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/20 17:28:43 by maouzal           #+#    #+#             */
-/*   Updated: 2023/09/17 19:58:21 by otamrani         ###   ########.fr       */
+/*   Updated: 2023/09/17 22:00:03 by otamrani         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,19 +110,13 @@ void	ft_cd(t_data *data)
 		return ;
 	}
 	if (!path || !ft_strcmp(path, "~"))
-	{
 		change_path(data, ft_getenv("HOME"));
-	}
 	else
 	{
 		if (stat(data->cmd[1], &path_stat) == 0)
-		{
 			cd_check(data, path_stat);
-		}
 		else
-		{
 			no_such_file_or_directory(data);
-		}
 	}
 	free(path);
 }
